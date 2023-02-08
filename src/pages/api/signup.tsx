@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import UserService, {DuplicateEmailOrUsername} from '../../lib/UserService'
-import dbConnect from '@/lib/dbConnect';
 
 export default async function signup(req: NextApiRequest, res: NextApiResponse) {
   try {

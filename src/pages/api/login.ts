@@ -17,15 +17,32 @@ const authenticate = (method: string, req: NextApiRequest, res: NextApiResponse)
 
 passport.use(UserService.localStrategy);
 
+// passport.serializeUser stores user object passed in the cb method above in req.session.passport
+passport.serializeUser((user, cb) => {
+    process.nextTick(function () {
+        return cb(null, user);
+    });
+});
+
+// passport.deserializeUser stores the user object in req.user
+passport.deserializeUser(function (
+    user: any,
+    cb: (arg0: null, arg1: any) => any
+) {
+    process.nextTick(function () {
+        return cb(null, user);
+    });
+});
+
 export default nextConnect()
     .use(passport.initialize())
     .post(async (req: NextApiRequest, res: NextApiResponse) => {
         try {
 
             const user = await authenticate('local', req, res);
-            
 
-            const session = {email: "", username: ""};
+
+            const session = { email: "", username: "" };
             // @ts-ignore
             session.email = user.email;
             // @ts-ignore

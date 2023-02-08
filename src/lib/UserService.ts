@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import Local from "passport-local";
+import { Profile, Strategy as GoogleStrategy } from "passport-google-oauth20"
 import User from "../models/User.model";
 import dbConnect from "./dbConnect";
 
@@ -10,10 +11,10 @@ export interface CreateUserData {
 }
 
 export interface UserData {
-    email: string,
-    username: string,
-    password: string,
-    salt: string
+    email?: string,
+    username?: string,
+    password?: string,
+    salt?: string
 }
 
 export default class UserService {
@@ -38,6 +39,12 @@ export default class UserService {
     static validatePassword(user: UserData, inputPassword: string) {
         const { hash: inputHash } = this.hashPassword(inputPassword, user.salt);
         return user.password === inputHash;
+    }
+
+    static saveUser(user: Profile) {
+        return new Promise((resolve, reject) => {
+            resolve("Successful");
+        });
     }
 
     static async createUser(userData: CreateUserData) {

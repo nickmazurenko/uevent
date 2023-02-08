@@ -3,6 +3,7 @@ import Router from 'next/router'
 // import { useUser } from '../lib/hooks'
 import Layout from '@/components/Layout'
 import AuthForm from '@/components/AuthForm'
+import Link from 'next/link'
 
 const Login = () => {
     //   useUser({ redirectTo: '/', redirectIfFound: true })
@@ -41,6 +42,33 @@ const Login = () => {
         <Layout>
             <div className="login">
                 <AuthForm isLogin errorMessage={errorMsg} onSubmit={handleSubmit} />
+            </div>
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                    width: "100%",
+                    textAlign: "center",
+                }}
+            >
+                <h1 style={{ fontSize: "2.5rem" }}>Login with Google</h1>
+                <Link href="/api/google-login" passHref>
+                    <button
+                        style={{
+                            border: "1px solid black",
+                            backgroundColor: "white",
+                            borderRadius: "10px",
+                            height: "50px",
+                            width: "200px",
+                            cursor: "pointer",
+                        }}
+                    >
+                        Proceed
+                    </button>
+                </Link>
             </div>
             <style jsx>{`
         .login {

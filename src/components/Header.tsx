@@ -1,69 +1,31 @@
-import { useUser } from "@/lib/hooks";
+import React from "react";
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
 
-const Header = () => {
+const Header: React.FC = () => {
+  
+  const { data: session, status } = useSession();
 
-    const user = useUser({ redirectTo: undefined ,redirectIfFound: false });
-
-    return (
-        <header>
-            <nav>
-                <ul>
-                    <li>
-                        <Link href="/" legacyBehavior>
-                            <a>Home</a>
-                        </Link>
-                    </li>
-                    {user ? (
-                        <>
-                            <li>
-                                <Link href="/profile" legacyBehavior>
-                                    <a>Profile</a>
-                                </Link>
-                            </li>
-                            <li>
-                                <a href="/api/logout">Logout</a>
-                            </li>
-                        </>
-                    ) : (
-                        <li>
-                            <Link href="/auth/login" legacyBehavior>
-                                <a>Login</a>
-                            </Link>
-                        </li>
-                    )}
-                </ul>
-            </nav>
-            <style jsx>{`
-        nav {
-          max-width: 42rem;
-          margin: 0 auto;
-          padding: 0.2rem 1.25rem;
-        }
-        ul {
-          display: flex;
-          list-style: none;
-          margin-left: 0;
-          padding-left: 0;
-        }
-        li {
-          margin-right: 1rem;
-        }
-        li:first-child {
-          margin-left: auto;
-        }
-        a {
-          color: #fff;
-          text-decoration: none;
-        }
-        header {
-          color: #fff;
-          background-color: #333;
-        }
-      `}</style>
-        </header>
-    )
-
-}
+  return (
+    <div className="w-full p-5 text-white flex justify-between bg-gray-800">
+      <Link href="/" className="text-white">
+        Home
+      </Link>
+      {session ? (
+        <div className="flex justify-around w-1/2">
+          <span>{session.user?.email}</span>
+          <Link href="/profile">Profile</Link>
+          <button onClick={() => signOut()}>
+            <a>Log out</a>
+          </button>
+        </div>
+      ) : (
+        <Link href="/api/auth/signin" className="text-white">
+          Sign In
+        </Link>
+      )}
+    </div>
+  );
+};
 
 export default Header;

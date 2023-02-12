@@ -20,7 +20,7 @@ const Header: React.FC = () => {
           </button>
         </div>
       ) : (
-        <Link href="/api/auth/signin" className="text-white">
+        <Link href="/auth/signin" className="text-white">
           Sign In
         </Link>
       )}

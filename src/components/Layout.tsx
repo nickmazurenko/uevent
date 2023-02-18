@@ -6,7 +6,7 @@ type Props = {
 };
 
 const Layout: React.FC<Props> = (props) => (
-  <div className="theme-dark" style={{backgroundColor: "#1e3a8a !important"}}>
+  <div className="theme-dark">
     <Header />
     <div className="flex items-center justify-center h-screen">{props.children}</div>
   </div>

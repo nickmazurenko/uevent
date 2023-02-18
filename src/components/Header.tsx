@@ -7,8 +7,8 @@ const Header: React.FC = () => {
   const { data: session, status } = useSession();
 
   return (
-    <div className="w-full p-5 text-white flex justify-between bg-gray-800">
-      <Link href="/" className="text-white">
+    <div className="w-full p-5 text-header flex justify-between header">
+      <Link href="/" className="text-header">
         Home
       </Link>
       {session ? (
@@ -20,7 +20,7 @@ const Header: React.FC = () => {
           </button>
         </div>
       ) : (
-        <Link href="/auth/signin" className="text-white">
+        <Link href="/auth/signin" className="text-header">
           Sign In
         </Link>
       )}

@@ -8,8 +8,8 @@ datasource db {
 }
 
 model Account {
-  id                 String     @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String      @map("user_id") @db.ObjectId
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String  @map("user_id") @db.ObjectId
   type               String
   provider           String
   providerAccountId  String  @map("provider_account_id")
@@ -30,9 +30,9 @@ model Account {
 }
 
 model Session {
-  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique @map("session_token")
-  userId       String      @map("user_id") @db.ObjectId
+  userId       String   @map("user_id") @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -40,15 +40,16 @@ model Session {
 }
 
 model User {
-  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  email         String?   @unique
-  emailVerified DateTime? @map("email_verified")
+  email         String?        @unique
+  emailVerified DateTime?      @map("email_verified")
   image         String?
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  createdAt     DateTime       @default(now()) @map(name: "created_at")
+  updatedAt     DateTime       @updatedAt @map(name: "updated_at")
   accounts      Account[]
   sessions      Session[]
+  Organization  Organization[]
 
   @@map(name: "users")
 }
@@ -57,6 +58,35 @@ model VerificationToken {
   identifier String   @id @map("_id")
   token      String   @unique
   expires    DateTime
+
   @@unique([identifier, token])
   @@map("verificationtokens")
+}
+
+model Organization {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  ownerId         String  @db.ObjectId
+  owner           User    @relation(fields: [ownerId], references: [id])
+  description     String
+  image           String
+  image_id        String
+  image_signature String
+  events          Event[] @relation("OrganizationEvents")
+
+  @@map(name: "organization")
+}
+
+model Event {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  image          String
+  cost           Float
+  tickets        Int
+  location       Json
+  tags           String[]
+  organization   Organization? @relation("OrganizationEvents", fields: [organizationId], references: [id])
+  organizationId String        @db.ObjectId
+
+  @@map(name: "event")
 }

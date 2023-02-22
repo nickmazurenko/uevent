@@ -15,6 +15,7 @@ const Header: React.FC = () => {
         <div className="flex justify-around w-1/2">
           <span>{session.user?.email}</span>
           <Link href="/profile">Profile</Link>
+          <Link href="/organization">Organization</Link>
           <button onClick={() => signOut()}>
             <a>Log out</a>
           </button>

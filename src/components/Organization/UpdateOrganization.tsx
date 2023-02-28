@@ -2,24 +2,25 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import Button from '../defaults/Buttons/Button';
 import OrganizationForm from './OrganizationForm';
 import Organization from './Organization';
+import { Organization as Org } from '@prisma/client';
 import OrganizationFrontService from '@/lib/organizations/OrganizationFrontService';
 const organizationImageId = "organizationImage";
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 
-export default function CreateOrganization() {
+export default function UpdateOrganization({ organization }: { organization: Org }) {
 
-  const [organizationData, setOrganizationData] = useState({ name: "", description: "", [organizationImageId]: null });
-  const [fileDataURL, setFileDataURL] = useState(null);
+  const [organizationData, setOrganizationData] = useState({ name: organization.name, description: organization.description, [organizationImageId]: null });
+  const [fileDataURL, setFileDataURL] = useState(organization.image);
 
   const [loading, setLoading] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
 
   const service = new OrganizationFrontService({
     organizationData,
-    setLoading,
     setOrganizationData,
-    fileDataURL
+    fileDataURL,
+    setLoading
   })
 
   const generatePreviewOrganization = service.createGeneratePreviewOrganization();
@@ -52,7 +53,7 @@ export default function CreateOrganization() {
 
   }, [organizationData[organizationImageId]]);
 
-  const handleFormSubmit = service.createHandleFormSubmit("create");
+  const handleFormSubmit = service.createHandleFormSubmit("update");
 
   return (
     <div className="flex flex-col items-center min-w-[35%]">
@@ -63,7 +64,7 @@ export default function CreateOrganization() {
         loading={loading}
         imageId={organizationImageId}
         organizationData={organizationData}
-        formType="create"
+        formType="update"
       ></OrganizationForm>
 
       <Button text="Open preview" onClick={() => setOpenPreview(!openPreview)} />

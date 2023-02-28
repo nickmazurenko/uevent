@@ -1,8 +1,8 @@
-import { getUserOrganization } from "@/lib/organizations";
 import { getUserByEmail } from "@/lib/users";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import nc from "next-connect";
+import OrganizationService from "@/lib/organizations/OrganizationService";
 
 const handler = nc({
     onError: (err, req, res: NextApiResponse, next) => {
@@ -17,7 +17,7 @@ const handler = nc({
     }
 
     const user = await getUserByEmail(session.user?.email || "");
-    const organization = await getUserOrganization(user);
+    const organization = await OrganizationService.getUserOrganization(user);
 
     await prisma.organization.delete({
         where: {

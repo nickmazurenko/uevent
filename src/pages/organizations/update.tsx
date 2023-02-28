@@ -1,6 +1,5 @@
-import Layout from "@/components/Layout"
-import CreateOrganization from "@/components/Organization/CreateOrganization";
-import Organization from "@/components/Organization/Organization";
+import Layout from "@/components/Layout";
+import UpdateOrganization from "@/components/Organization/UpdateOrganization";
 import OrganizationService from "@/lib/organizations/OrganizationService";
 import { Organization as Org } from "@prisma/client";
 import { GetServerSidePropsContext } from "next";
@@ -8,21 +7,17 @@ import { getServerSession } from "next-auth/next";
 import { options } from "../api/auth/[...nextauth]";
 
 type Props = {
-    organization?: Org | undefined
+    organization: Org
 }
 
-const OrganizationPage = ({ organization }: Props) => {
+const UpdateOrganizationPage = ({ organization }: Props) => {
+
     return (
         <Layout>
-            {
-                organization 
-                ?
-                <Organization organization={organization}></Organization>
-                :
-                <CreateOrganization />                
-            }
+            <UpdateOrganization organization={organization} />
         </Layout>
     )
+
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -35,9 +30,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     // @ts-ignore
     const organization = await OrganizationService.getUserOrganization(session.user);
-    
+
+    if (!organization) {
+        return { redirect: '/organizations' }
+    }
+
 
     return { props: { organization } };
 };
 
-export default OrganizationPage;
+export default UpdateOrganizationPage;

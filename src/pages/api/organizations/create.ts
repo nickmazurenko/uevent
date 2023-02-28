@@ -3,15 +3,15 @@ import DataURIParser from 'datauri/parser';
 import multer from 'multer';
 import nc from 'next-connect';
 import { getSession } from 'next-auth/react';
-import prisma from 'prisma/prisma';
-import path from 'path';
-import cloudinary from '@/lib/cloudinary';
-import { getUserOrganization } from '@/lib/organizations';
 import { getUserByEmail } from '@/lib/users';
+import OrganizationFormParser, { FormBody, IFile, OrganizationFormFields } from '@/lib/organizations/OrganizationFormParser';
+import uploadOrganizationImage from '@/lib/organizations/uploadOrganizationImage';
+import OrganizationService from '@/lib/organizations/OrganizationService';
+import { User } from '@prisma/client';
 
 export const config = {
     api: {
-      bodyParser: false, // Disallow body parsing, consume as stream
+        bodyParser: false, // Disallow body parsing, consume as stream
     },
 };
 
@@ -21,7 +21,7 @@ const handler = nc({
     onError: (err, req, res: NextApiResponse, next) => {
         console.error(err.stack);
         res.status(500).end("Something broke!");
-      },
+    },
 })
     .use(multer().any())
     .post(async (req: NextApiRequest, res: NextApiResponse) => {
@@ -32,45 +32,34 @@ const handler = nc({
         }
 
         try {
-            const { name, description } = req.body;
-            const image = req.files.find(file => file.fieldname === "organizationImage");
 
             const user = await getUserByEmail(session.user?.email || "");
 
-            if (await getUserOrganization(user)) {
+            if (await OrganizationService.getUserOrganization(user)) {
                 return res.status(400).json("User can create only one organization");
             }
 
-            const parser = new DataURIParser();
+            const organizationFormParser = new OrganizationFormParser({ requiredFields: OrganizationFormFields.All })
+            const {
+                name,
+                description,
+                image
+                // @ts-ignore
+            } = organizationFormParser.parse(req.body as FormBody, req.files as IFile[]);
+
 
             try {
 
-                const createImage = async (image) => {
-                    const base64Image = parser.format(path.extname(image.originalname), image.buffer);
-                    const uploadImageResponse = cloudinary.uploader.upload(base64Image.content, "uevent", { resource_type: "image" });
-                    return uploadImageResponse;
-                }
 
-                const createdImage = await createImage(image);
-                const imageURL = createdImage.url;
-                console.log(imageURL);
-                const image_id = createdImage.public_id;
-                const image_signature = createdImage.signature;
+                const cloudinaryImage = await uploadOrganizationImage(image as DataURIParser);
+                const newOrganization = await OrganizationService.create(
+                    user as User,
+                    name as string,
+                    description as string,
+                    cloudinaryImage
+                );
 
-
-
-                const newOrganization = await prisma.organization.create({
-                    data: {
-                        name,
-                        ownerId: user?.id,
-                        description,
-                        image: imageURL,
-                        image_id,
-                        image_signature
-                    },
-                });
-
-                res.status(201).json(newOrganization);
+                res.status(201).json({ data: { organization: newOrganization } });
 
 
             } catch (error) {
@@ -80,12 +69,12 @@ const handler = nc({
 
 
             // @ts-ignore
-            
+
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: 'Internal server error' });
         } finally {
-            await prisma.$disconnect();
+            // await prisma.$disconnect();
         }
     })
 

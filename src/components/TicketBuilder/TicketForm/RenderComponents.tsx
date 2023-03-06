@@ -119,7 +119,7 @@ function ModalSelectRC({ toggleModal }: { toggleModal: () => void }) {
 }
 
 export default function RenderComponents({ ticketData, setTicketData }: { ticketData: TicketData, setTicketData: Dispatch<SetStateAction<TicketData>> }) {
-    const { ticketItems, renderComponentsArray, } = useContext(TicketBuilderContext);
+    const { ticketItems, renderComponentsArray, rcService} = useContext(TicketBuilderContext);
 
     const [isAddComponent, setIsAddComponent] = useState(false);
 
@@ -138,12 +138,42 @@ export default function RenderComponents({ ticketData, setTicketData }: { ticket
 
     }
 
+    const createMoveFunction = (moveTo: "up" | "down", index: number) => {
+        return (() => {
+
+            let newIndex = -1;
+            if (moveTo === 'up') {
+                newIndex = index - 1;
+            } else if (moveTo === 'down') {
+                newIndex = index + 1;
+            }
+
+            if (newIndex < 0 || newIndex >= renderComponentsArray.length) {
+                return;
+            }
+
+            const newRenderComponentsArray = [...renderComponentsArray];
+
+            [newRenderComponentsArray[index], newRenderComponentsArray[newIndex]] =
+                [newRenderComponentsArray[newIndex], newRenderComponentsArray[index]];
+
+            rcService?.swapElements(newRenderComponentsArray);
+
+        })
+    }
+
     return (
         <div className="w-[25%]" id="renderComponents">
             Render Components
             {
                 renderComponentsArray.map((rc, index) => {
-                    return <RenderComponentController key={index} rc={rc} controllerData={{ name: getInstanceOf(rc) }} ></RenderComponentController>
+                    return <RenderComponentController 
+                        key={index} 
+                        rc={rc} 
+                        controllerData={{ name: getInstanceOf(rc) }}
+                        moveUp={createMoveFunction("up", index)}
+                        moveDown={createMoveFunction("down", index)}
+                    ></RenderComponentController>
                 })
             }
             <button

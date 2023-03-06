@@ -7,12 +7,20 @@ import TextInput from "../Inputs/TextInput";
 
 function RCParams({ rc }: { rc: RenderComponent }) {
 
-    const { rcService } = useContext(TicketBuilderContext);
+    const { rcService, selectedComponent } = useContext(TicketBuilderContext);
 
     const [form, setForm] = useState({
         position: new Vector2(rc.position.x, rc.position.y),
         size: rc.size ? new Vector2(rc.size.x, rc.size.y) : new Vector2(0, 0)
     });
+
+    useEffect(() => {
+
+        if (selectedComponent) {
+            setForm({ position: rc.position, size: rc.size ? rc.size : new Vector2() })
+        }
+
+    }, [selectedComponent])
 
     const onParamsChange: ChangeEventHandler<HTMLInputElement> = (e) => {
 
@@ -76,9 +84,16 @@ function RCParams({ rc }: { rc: RenderComponent }) {
 
 function TextParams({ rc }: { rc: Text }) {
 
-    const { rcService } = useContext(TicketBuilderContext);
+    const { rcService, selectedComponent } = useContext(TicketBuilderContext);
 
-    const [form, setForm] = useState({ text: rc.text });
+
+    const [form, setForm] = useState({ text: rc.text, color: rc.color });
+
+    useEffect(() => {
+        if (selectedComponent) {
+            setForm({ text: rc.text, color: rc.color  });
+        }
+    }, [selectedComponent])
 
     const onParamsChange: ChangeEventHandler<HTMLInputElement> = (e) => {
 
@@ -88,14 +103,20 @@ function TextParams({ rc }: { rc: Text }) {
             setForm({ ...form, text: e.target.value });
         }
 
+        if (targetId === 'color') {
+            setForm({ ...form, color: e.target.value  })
+        }
+
     }
 
     useEffect(() => {
 
         rc.text = form.text;
+        rc.color = form.color;
+
         rcService.updateRC(rc);
 
-    }, [form.text]);
+    }, [form.text, form.color]);
 
 
     return (
@@ -103,6 +124,9 @@ function TextParams({ rc }: { rc: Text }) {
             <RCParams rc={rc}></RCParams>
             <div>
                 <TextInput inputId="text" label="Text: " value={form.text} onChange={onParamsChange} ></TextInput>
+            </div>
+            <div>
+                <TextInput inputId="color" label="Color: " value={form.color} onChange={onParamsChange} ></TextInput>
             </div>
         </div>
     )

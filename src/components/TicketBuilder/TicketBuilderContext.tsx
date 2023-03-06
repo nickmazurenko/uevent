@@ -73,6 +73,10 @@ export class RenderComponents {
         this.setRenderComponents(this.renderComponents.filter(v => v !== rc));
     }
 
+    swapElements(newArray: RenderComponent[]) {
+        this.setRenderComponents(newArray);
+    }
+
 }
 
 export const TicketBuilderContext = createContext(defaultContextValues);
@@ -83,6 +87,7 @@ export default function TicketBuilderContextWrapper({ children }) {
     const [ticketSize, setTicketSize] = useState(new Vector2(500, 300));
     const [renderComponentsArray, setRenderComponentsArray] = useState<RenderComponent[]>([]);
     const [renderComponents] = useState(new RenderComponents(renderComponentsArray, setRenderComponentsArray));
+    const [rcService] = useState(new ComponentsService(renderComponents));
 
     const [selectedComponent, setSelectedComponent] = useState<RenderComponent | null>(null);
 
@@ -92,7 +97,6 @@ export default function TicketBuilderContextWrapper({ children }) {
 
     }, [renderComponentsArray]);
 
-    const [rcService] = useState(new ComponentsService(renderComponents));
 
     return (
         <div>

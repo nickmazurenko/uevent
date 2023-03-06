@@ -34,7 +34,7 @@ export default class ComponentsService {
     }
 
     addImageRC(src: string) {
-        console.log(src);
+        // console.log(src);
         const rc = new Image({ src });
         this.renderComponents.addComponent(rc);
         return rc;
@@ -51,6 +51,10 @@ export default class ComponentsService {
             this.eventRC = this.addTextRC(eventName);
 
         }
+    }
+
+    swapElements(newArray: RenderComponent[]) {
+        this.renderComponents.swapElements(newArray);
     }
 
 }

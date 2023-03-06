@@ -23,6 +23,10 @@ export default class ComponentsService {
 
     }
 
+    updateRC(rc: RenderComponent) {
+        this.renderComponents.updateComponent(rc);
+    }
+
     updateTextRC(rc: RenderComponent) {
 
         this.renderComponents.updateComponent(rc);

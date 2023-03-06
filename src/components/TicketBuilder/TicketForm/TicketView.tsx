@@ -1,10 +1,11 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { TicketBuilderContext } from "../TicketBuilderContext";
 import { Text, Image as ImageRender } from "../CanvasRenderer";
+import Vector2 from "../CanvasRenderer/Vector2";
 
 export default function TicketView() {
 
-    const { ticketSize, renderComponentsArray } = useContext(TicketBuilderContext);
+    const { ticketSize, renderComponentsArray, rcService } = useContext(TicketBuilderContext);
 
     const canvasRef = useRef(null);
 
@@ -20,16 +21,36 @@ export default function TicketView() {
     const drawRCs = () => {
         fillRect();
         renderComponentsArray.forEach(rc => {
-            console.log('there');
+            // console.log('there');
             if (rc instanceof Text) {
-                context.fillStyle = "black";
-                context.font = "48px serif";
-                context?.fillText(rc.text, 10, 50);
+                context.fillStyle = rc.color;
+                context.font = rc.font;
+                context?.fillText(rc.text, rc.position.x, rc.position.y);
             }
             if (rc instanceof ImageRender) {
                 const image = new Image();
                 image.src = rc.src;
-                context.drawImage(image, 0, 0);
+
+                image.onload = (e) => {
+                    if (!rc.size) {
+                        rc.size = new Vector2();
+                        rc.size.x = image.width;
+                        rc.size.y = image.height;
+                        rcService?.updateRC(rc);
+                    }
+                }
+
+                if (rc.size) 
+                {                    
+                    context.drawImage(
+                        image,
+                        rc.position.x,
+                        rc.position.y,
+                        rc.size.x,
+                        rc.size.y);
+                }
+
+
             }
         })
     }

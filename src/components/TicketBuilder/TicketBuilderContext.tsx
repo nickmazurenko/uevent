@@ -18,7 +18,9 @@ export type TicketBuilderContextType = {
     setTicketSize: Dispatch<SetStateAction<Vector2>> | null,
     renderComponents: RenderComponents | null,
     rcService: ComponentsService | null,
-    renderComponentsArray: RenderComponent[]
+    renderComponentsArray: RenderComponent[],
+    selectedComponent: RenderComponent | null,
+    setSelectedComponent: Dispatch<SetStateAction<RenderComponent | null>> | null
 }
 
 const defaultTicketItems = {
@@ -34,7 +36,9 @@ const defaultContextValues: TicketBuilderContextType = {
     setTicketSize: null,
     renderComponents: null,
     rcService: null, 
-    renderComponentsArray: []
+    renderComponentsArray: [],
+    selectedComponent: null,
+    setSelectedComponent: null
 }
 
 export class RenderComponents {
@@ -49,7 +53,7 @@ export class RenderComponents {
 
     updateRenderComponents(renderComponentsArray: RenderComponent[]) {
         this.renderComponents = renderComponentsArray;
-        console.log("render components", this.renderComponents);
+        // console.log("render components", this.renderComponents);
     }
 
     addComponent(rc: RenderComponent) {
@@ -80,6 +84,8 @@ export default function TicketBuilderContextWrapper({ children }) {
     const [renderComponentsArray, setRenderComponentsArray] = useState<RenderComponent[]>([]);
     const [renderComponents] = useState(new RenderComponents(renderComponentsArray, setRenderComponentsArray));
 
+    const [selectedComponent, setSelectedComponent] = useState<RenderComponent | null>(null);
+
     useEffect(() => {
 
         renderComponents.updateRenderComponents(renderComponentsArray);
@@ -97,7 +103,9 @@ export default function TicketBuilderContextWrapper({ children }) {
                 setTicketSize,
                 renderComponents: renderComponents,
                 rcService,
-                renderComponentsArray
+                renderComponentsArray,
+                selectedComponent,
+                setSelectedComponent
             }}>
 
                 {children}

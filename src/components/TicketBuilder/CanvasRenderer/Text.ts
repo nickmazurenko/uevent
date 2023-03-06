@@ -22,8 +22,8 @@ export class Text extends RenderComponent {
         size,
         scale,
         text,
-        color,
-        font,
+        color = "black",
+        font = "48px serif",
         fontSize
     }: TextConstructorParams
     ) {

@@ -80,13 +80,16 @@ model Organization {
 model Event {
   id             String        @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  image          String
+  description    String
+  images           String[]
+  image_ids        String[]
+  image_signatures String[]
   cost           Float
   tickets        Int
   location       Json
   tags           String[]
-  organization   Organization? @relation("OrganizationEvents", fields: [organizationId], references: [id])
   organizationId String        @db.ObjectId
+  organization   Organization? @relation("OrganizationEvents", fields: [organizationId], references: [id])
 
   @@map(name: "event")
 }

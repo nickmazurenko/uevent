@@ -30,6 +30,8 @@
     "nodemailer": "^6.9.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-tag-input": "^6.8.1",
     "typescript": "4.9.5"
   },
   "devDependencies": {
@@ -37,6 +39,7 @@
     "@types/next-auth": "3.13.0",
     "@types/node": "18.13.0",
     "@types/react": "18.0.27",
+    "@types/react-tag-input": "^6.6.1",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
     "prisma": "4.10.1",

@@ -4,6 +4,7 @@ import path from "path";
 export enum EventFormFields {
   Name,
   Description,
+  StartAt,
   Location,
   Tickets,
   Cost,
@@ -15,6 +16,8 @@ export enum EventFormFields {
 export type FormBody = {
   name?: string | undefined;
   description?: string | undefined;
+  startAt?: string | undefined;
+  duration?: string | undefined;
   cost?: string | undefined;
   tickets?: string | undefined;
   location?: JSON | undefined;
@@ -61,6 +64,14 @@ export default class EventFormParser {
     return "description" in body ? body.description : false;
   }
 
+  isStartAtInBody(body: FormBody) {
+    return "startAt" in body ? body.startAt : false;
+  }
+  
+  isDurationInBody(body: FormBody) {
+    return "duration" in body ? body.duration : false;
+  }
+
   isTicketsInBody(body: FormBody) {
     return "tickets" in body ? body.tickets : false;
   }
@@ -90,6 +101,8 @@ export default class EventFormParser {
     const result: {
       name?: string | null;
       description?: string | null;
+      startAt?: string | null;
+      duration?: number | null;
       images?: IFile[] | null;
       tickets?: number | null;
       cost?: number | null;
@@ -98,6 +111,8 @@ export default class EventFormParser {
     } = {
       name: null,
       description: null,
+      startAt: null,
+      duration: null,
       images: null,
       tickets: null,
       cost: null,
@@ -112,6 +127,10 @@ export default class EventFormParser {
     if (checkAll || requiredFieldsArray.includes(EventFormFields.Description)) {
       if (!this.isDescriptionInBody(body))
         throw new EventFormParserError("Description is required");
+    }
+    if (checkAll || requiredFieldsArray.includes(EventFormFields.StartAt)) {
+      if (!this.isStartAtInBody(body))
+        throw new EventFormParserError("Event start date is required");
     }
     if (checkAll || requiredFieldsArray.includes(EventFormFields.Image)) {
       if (!this.isImageInFiles(files))
@@ -135,6 +154,8 @@ export default class EventFormParser {
     }
     result.name = body.name;
     result.description = body.description;
+    result.startAt = body.startAt;
+    result.duration = body.duration ? parseInt(body.duration): 0;
     result.images = this.getImages(files);
     result.cost = body.cost ? parseFloat(body.cost) : 0;
     result.tickets = body.tickets ? parseInt(body.tickets): 0;
@@ -160,6 +181,8 @@ export default class EventFormParser {
     return {
       name: fields.name,
       description: fields.description,
+      startAt: fields.startAt,
+      duration: fields.duration,
       images: base64Images,
       cost: fields.cost,
       tickets: fields.tickets,

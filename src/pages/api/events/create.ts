@@ -37,6 +37,8 @@ const handler = nc({
     const {
       name,
       description,
+      startAt,
+      duration,
       images,
       tickets,
       cost,
@@ -57,6 +59,8 @@ const handler = nc({
           organization as Organization,
           name as string,
           description as string,
+          startAt as string,
+          duration as number,
           cloudinaryImages,
           tickets as number,
           cost as number,

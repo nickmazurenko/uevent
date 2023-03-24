@@ -8,6 +8,8 @@ export default function CreateEvent() {
   const [eventData, setEventData] = useState<EventData>({
     name: "",
     description: "",
+    startAt: "",
+    endAt: "",
     [eventImageId]: [],
     cost: 0,
     tickets: 0,

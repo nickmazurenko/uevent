@@ -5,6 +5,8 @@ export type EventData = {
   name: string;
   description: string;
   eventImages: string[] | Blob[] | null;
+  startAt: string;
+  endAt: string;
   cost: number;
   tickets: number;
   location: JSON;
@@ -53,6 +55,8 @@ export default class EventFrontService {
           eventForm.append(EventFrontService.eventImageId, image);
         });
       eventForm.append("cost", this.eventData.cost.toString());
+      eventForm.append("startAt", this.eventData.startAt);
+      eventForm.append("duration", (new Date(this.eventData.endAt).getTime() - new Date(this.eventData.endAt).getTime()).toString());
       eventForm.append("tickets", this.eventData.tickets.toString());
       eventForm.append("location", this.eventData.location.toString());
       this.eventData.tags.forEach(tag => {
@@ -93,6 +97,7 @@ export default class EventFrontService {
 
       } else {
         this.setEventData({...eventData, [event.target.id]: event.target.value});
+        console.log(event.target.id, event.target.value);
       }
     }
     return handleEventDataChange;
@@ -108,6 +113,7 @@ createGeneratePreviewEvent() {
       name: eventData.name,
       description: eventData.description,
       image: fileDataURL || "",
+      startAt: eventData.startAt || "",
       cost: eventData.cost,
       tickets: eventData.tickets,
       location: eventData.location,

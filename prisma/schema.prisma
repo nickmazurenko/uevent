@@ -84,6 +84,8 @@ model Event {
   images           String[]
   image_ids        String[]
   image_signatures String[]
+  start_at       String
+  duration       Int
   cost           Float
   tickets        Int
   location       Json

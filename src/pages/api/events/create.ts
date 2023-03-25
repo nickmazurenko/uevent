@@ -54,7 +54,6 @@ const handler = nc({
        */
 
        Promise.all(images.map(async (image) => await uploadEventImage(image as DataURIParser))).then((cloudinaryImages) => {
-        console.log(cloudinaryImages);
         EventService.create(
           organization as Organization,
           name as string,
@@ -63,7 +62,7 @@ const handler = nc({
           duration as number,
           cloudinaryImages,
           tickets as number,
-          cost as number,
+          cost as {amount: number, currency: string},
           location as JSON,
           tags as string[]
         );

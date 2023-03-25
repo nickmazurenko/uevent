@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Button from "../defaults/Buttons/Button";
-import EventFrontService, { EventData } from "@/lib/events/EventsFrontService";
+import EventFrontService, { Currency, EventData } from "@/lib/events/EventsFrontService";
 import EventForm from "./EventForm";
 const eventImageId = "eventImages";
 
@@ -11,7 +11,7 @@ export default function CreateEvent() {
     startAt: "",
     endAt: "",
     [eventImageId]: [],
-    cost: 0,
+    cost: {amount: 0, currency: Currency.USD},
     tickets: 0,
     location: JSON,
     tags: [],

@@ -86,7 +86,7 @@ model Event {
   image_signatures String[]
   start_at       String
   duration       Int
-  cost           Float
+  cost           Cost
   tickets        Int
   location       Json
   tags           String[]
@@ -94,4 +94,15 @@ model Event {
   organization   Organization? @relation("OrganizationEvents", fields: [organizationId], references: [id])
 
   @@map(name: "event")
+}
+
+type Cost {
+  amount Float
+  currency Currency
+}
+
+enum Currency {
+  USD
+  UAH
+  EUR
 }

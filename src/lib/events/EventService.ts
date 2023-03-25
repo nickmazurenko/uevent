@@ -7,7 +7,7 @@ export interface ICloudinaryImage {
 }
 
 export default class EventService {
-  static async create (owner: Organization, name: string, description: string, startAt: string, duration: number, images: ICloudinaryImage[], tickets: number, cost: number, location: JSON, tags: string[]) {
+  static async create (owner: Organization, name: string, description: string, startAt: string, duration: number, images: ICloudinaryImage[], tickets: number, cost: {amount: number, currency: string}, location: JSON, tags: string[]) {
     const newEvent = await prisma.event.create({
       data: {
         name,

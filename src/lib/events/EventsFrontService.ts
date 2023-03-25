@@ -7,10 +7,21 @@ export type EventData = {
   eventImages: string[] | Blob[] | null;
   startAt: string;
   endAt: string;
-  cost: number;
+  cost: Cost;
   tickets: number;
   location: JSON;
   tags: Tag[];
+}
+
+export type Cost = {
+  amount: number;
+  currency: Currency;
+}
+
+export enum Currency {
+  USD = "USD",
+  EUR = "EUR",
+  UAH = "UAH"
 }
 
 export type  EventFrontServiceParams = {
@@ -54,12 +65,19 @@ export default class EventFrontService {
         this.eventData.eventImages.forEach(image => {
           eventForm.append(EventFrontService.eventImageId, image);
         });
-      eventForm.append("cost", this.eventData.cost.toString());
+      
+        eventForm.append("cost[amount]", this.eventData.cost.amount.toString());
+      eventForm.append("cost[currency]", this.eventData.cost.currency);
+
       eventForm.append("startAt", this.eventData.startAt);
       eventForm.append("duration", (new Date(this.eventData.endAt).getTime() - new Date(this.eventData.endAt).getTime()).toString());
+      
       eventForm.append("tickets", this.eventData.tickets.toString());
       eventForm.append("location", this.eventData.location.toString());
+      
+      // @ts-ignore
       this.eventData.tags.forEach(tag => {
+        // @ts-ignore
         eventForm.append('tags[]', tag);
       });
       this.setLoading(true);
@@ -83,18 +101,26 @@ export default class EventFrontService {
 
   createHandleEventDataChange() {
     const eventData = this.eventData;
-    const handleEventDataChange = (event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> | {target: {id: string, value: Tag[] | File[]}}) => {
+    const handleEventDataChange = (event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> | {target: {id: string, value: Tag[] | File[] | number}}) => {
       if(event.target.id === EventFrontService.eventImageId) {
         // @ts-ignore
         const images = event.target.value;
-
+        // @ts-ignore
         if(!images[0].type.match(EventFrontService.imageMimeType)) {
           alert("Image mime type is not valid");
           return;
         }
 
         this.setEventData({...eventData, [EventFrontService.eventImageId]: images});
+        
+      } else if(event.target.id === 'cost') {
+        // @ts-ignore
+        if(event.target.value in Currency) 
+          this.setEventData({...eventData, "cost": {...eventData.cost, "currency": event.target.value as Currency}});
+        else
+          this.setEventData({...eventData, "cost": {...eventData.cost, "amount": event.target.value as number}});
 
+          console.log(eventData.cost);
       } else {
         this.setEventData({...eventData, [event.target.id]: event.target.value});
         console.log(event.target.id, event.target.value);

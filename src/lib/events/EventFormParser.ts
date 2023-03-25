@@ -18,11 +18,16 @@ export type FormBody = {
   description?: string | undefined;
   startAt?: string | undefined;
   duration?: string | undefined;
-  cost?: string | undefined;
+  cost?: Cost | undefined;
   tickets?: string | undefined;
   location?: JSON | undefined;
   tags?: string[] | undefined;
 };
+
+type Cost = {
+  amount: number;
+  currency: string;
+}
 
 export interface IFile {
   fieldname: string;
@@ -56,15 +61,15 @@ export default class EventFormParser {
     return files.filter((file) => file.fieldname === "eventImage");
   }
 
-  isNameInBody(body: FormBody) {
+  hasName(body: FormBody) {
     return "name" in body ? body.name : false;
   }
 
-  isDescriptionInBody(body: FormBody) {
+  hasDescription(body: FormBody) {
     return "description" in body ? body.description : false;
   }
 
-  isStartAtInBody(body: FormBody) {
+  hasStartAt(body: FormBody) {
     return "startAt" in body ? body.startAt : false;
   }
   
@@ -72,23 +77,23 @@ export default class EventFormParser {
     return "duration" in body ? body.duration : false;
   }
 
-  isTicketsInBody(body: FormBody) {
+  hasTickets(body: FormBody) {
     return "tickets" in body ? body.tickets : false;
   }
 
-  isCostInBody(body: FormBody) {
+  hasCost(body: FormBody) {
     return "cost" in body ? body.cost : false;
   }
 
-  isLocationInBody(body: FormBody) {
+  hasLocation(body: FormBody) {
     return "location" in body ? body.location : false;
   }
 
-  isTagsInBody(body: FormBody) {
+  hasTags(body: FormBody) {
     return "tags" in body ? body.tags : false;
   }
 
-  isImageInFiles(files: IFile[]) {
+  hasImage(files: IFile[]) {
     const image = this.getImages(files);
     return image ?? false;
   }
@@ -105,7 +110,7 @@ export default class EventFormParser {
       duration?: number | null;
       images?: IFile[] | null;
       tickets?: number | null;
-      cost?: number | null;
+      cost?: Cost | null;
       location?: JSON | null;
       tags?: string[] | null
     } = {
@@ -121,35 +126,35 @@ export default class EventFormParser {
     };
     
     if (checkAll || requiredFieldsArray.includes(EventFormFields.Name)) {
-      if (!this.isNameInBody(body))
+      if (!this.hasName(body))
         throw new EventFormParserError("Name is required");
     }
     if (checkAll || requiredFieldsArray.includes(EventFormFields.Description)) {
-      if (!this.isDescriptionInBody(body))
+      if (!this.hasDescription(body))
         throw new EventFormParserError("Description is required");
     }
     if (checkAll || requiredFieldsArray.includes(EventFormFields.StartAt)) {
-      if (!this.isStartAtInBody(body))
+      if (!this.hasStartAt(body))
         throw new EventFormParserError("Event start date is required");
     }
     if (checkAll || requiredFieldsArray.includes(EventFormFields.Image)) {
-      if (!this.isImageInFiles(files))
+      if (!this.hasImage(files))
         throw new EventFormParserError("Image is required");
     }
     if (checkAll || requiredFieldsArray.includes(EventFormFields.Tickets)) {
-      if (!this.isTicketsInBody(body))
+      if (!this.hasTickets(body))
         throw new EventFormParserError("Tickets is required");
     }
     if (checkAll || requiredFieldsArray.includes(EventFormFields.Cost)) {
-      if (!this.isCostInBody(body))
+      if (!this.hasCost(body))
         throw new EventFormParserError("Cost is required");
     }
     if (checkAll || requiredFieldsArray.includes(EventFormFields.Location)) {
-      if (!this.isLocationInBody(body))
+      if (!this.hasLocation(body))
         throw new EventFormParserError("Location is required");
     }
     if (checkAll || requiredFieldsArray.includes(EventFormFields.Tags)) {
-      if (!this.isTagsInBody(body))
+      if (!this.hasTags(body))
         throw new EventFormParserError("Tags is required");
     }
     result.name = body.name;
@@ -157,7 +162,11 @@ export default class EventFormParser {
     result.startAt = body.startAt;
     result.duration = body.duration ? parseInt(body.duration): 0;
     result.images = this.getImages(files);
-    result.cost = body.cost ? parseFloat(body.cost) : 0;
+    result.cost = {
+      // @ts-ignore
+      amount: parseFloat(body.cost?.amount) ?? 0,
+      currency: body.cost?.currency ?? "USD"
+    };
     result.tickets = body.tickets ? parseInt(body.tickets): 0;
     result.location = body.location;
     result.tags = body.tags;

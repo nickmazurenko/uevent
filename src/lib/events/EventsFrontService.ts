@@ -73,7 +73,7 @@ export default class EventFrontService {
       eventForm.append("duration", (new Date(this.eventData.endAt).getTime() - new Date(this.eventData.endAt).getTime()).toString());
       
       eventForm.append("tickets", this.eventData.tickets.toString());
-      eventForm.append("location", this.eventData.location.toString());
+      eventForm.append("location", JSON.stringify(this.eventData.location));
       
       // @ts-ignore
       this.eventData.tags.forEach(tag => {
@@ -119,8 +119,6 @@ export default class EventFrontService {
           this.setEventData({...eventData, "cost": {...eventData.cost, "currency": event.target.value as Currency}});
         else
           this.setEventData({...eventData, "cost": {...eventData.cost, "amount": event.target.value as number}});
-
-          console.log(eventData.cost);
       } else {
         this.setEventData({...eventData, [event.target.id]: event.target.value});
         console.log(event.target.id, event.target.value);

@@ -9,6 +9,7 @@ import EventTicketAndCostInput from "./EventFormComponents/EventTicketAndCostInp
 import EventTagInput from "./EventFormComponents/EventTagInput";
 import EventImageInput from "./EventFormComponents/EventImageInput";
 import EventStartAndEndInput from "./EventFormComponents/EventStartAndEndInput";
+import LocationTypeInput from "./EventFormComponents/EventLocationTypeInput";
 
 export type Props = {
   onSubmit: FormEventHandler<HTMLFormElement>;
@@ -29,7 +30,10 @@ function EventForm({
 }: Props) {
   const event = useMemo(() => eventData, [eventData]);
   return (
-    <form onSubmit={onSubmit} className="flex flex-col items-center w-full">
+    <form
+      onSubmit={onSubmit}
+      className="flex flex-col items-center h-full w-full"
+    >
       <EventNameInput value={event.name} onChange={onDataChange} />
 
       <EventDescriptionInput
@@ -51,7 +55,13 @@ function EventForm({
 
       <EventTagInput value={event.tags} onChange={onDataChange} />
 
-      <EventImageInput id={imageId} value={event.eventImages} onChange={onDataChange} />
+      <EventImageInput
+        id={imageId}
+        value={event.eventImages}
+        onChange={onDataChange}
+      />
+
+      <LocationTypeInput onChange={onDataChange} />
 
       <Button
         text={formType == "create" ? "Create new event" : "Update Event"}

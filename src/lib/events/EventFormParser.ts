@@ -20,7 +20,7 @@ export type FormBody = {
   duration?: string | undefined;
   cost?: Cost | undefined;
   tickets?: string | undefined;
-  location?: JSON | undefined;
+  location: string;
   tags?: string[] | undefined;
 };
 
@@ -168,7 +168,7 @@ export default class EventFormParser {
       currency: body.cost?.currency ?? "USD"
     };
     result.tickets = body.tickets ? parseInt(body.tickets): 0;
-    result.location = body.location;
+    result.location = JSON.parse(body.location);
     result.tags = body.tags;
 
     return result;

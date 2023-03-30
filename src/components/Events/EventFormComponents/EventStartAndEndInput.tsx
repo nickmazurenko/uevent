@@ -20,7 +20,7 @@ export default function EventStartAndEndInput({
       </div>
       <div className="flex flex-col items-center w-full mb-6">
         <label>End At</label>
-        <DateTimeInput value={endAt} handleChange={onChange} id="endAt" />
+        <DateTimeInput value={endAt} minDate={startAt} handleChange={onChange} id="endAt" />
       </div>
     </div>
   );

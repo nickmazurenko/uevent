@@ -6,6 +6,7 @@ type Props = {
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   id: string;
   value: string;
+  minDate?: string;
 };
 
 export default function DateTimeInput(props: Props) {

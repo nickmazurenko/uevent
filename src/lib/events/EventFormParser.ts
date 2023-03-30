@@ -161,7 +161,6 @@ export default class EventFormParser {
     result.description = body.description;
     result.startAt = body.startAt;
     result.duration = body.duration ? parseInt(body.duration): 0;
-    console.log("smth", body);
     result.images = this.getImages(files);
     result.cost = {
       // @ts-ignore

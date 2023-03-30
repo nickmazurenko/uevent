@@ -70,8 +70,7 @@ export default class EventFrontService {
       eventForm.append("cost[currency]", this.eventData.cost.currency);
 
       eventForm.append("startAt", this.eventData.startAt);
-      eventForm.append("duration", (new Date(this.eventData.endAt).getTime() - new Date(this.eventData.endAt).getTime()).toString());
-      console.log((new Date(this.eventData.endAt).getTime() - new Date(this.eventData.startAt).getTime()).toString());
+      eventForm.append("duration", (new Date(this.eventData.endAt).getTime() - new Date(this.eventData.startAt).getTime()).toString());
       eventForm.append("tickets", this.eventData.tickets.toString());
       eventForm.append("location", JSON.stringify(this.eventData.location));
       

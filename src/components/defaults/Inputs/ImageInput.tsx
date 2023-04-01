@@ -24,8 +24,9 @@ type DropZoneProps = {
 
 function ImageDropZone({ onChange, id, value, index, number }: DropZoneProps) {
   const handleDrop = (acceptedFiles: File[]) => {
+    const result = value.concat(acceptedFiles);
     onChange({
-      target: { id: id, value: value.concat(acceptedFiles) },
+      target: { id: id, value: result.slice(0, number) },
     });
   };
   return (
@@ -88,18 +89,19 @@ function ImageInput({
       className={`cursor-pointer flex flex-wrap items-center justify-center gap-2 w-full ${className}`}
     >
       {renderImages()}
-      {Array(number - value.length)
-        .fill()
-        .map((_, index) => (
-          <ImageDropZone
-            key={index}
-            index={index}
-            value={value}
-            id={id}
-            number={number}
-            onChange={onChange}
-          />
-        ))}
+      {number - value.length > 0 &&
+        Array(number - value.length)
+          .fill()
+          .map((_, index) => (
+            <ImageDropZone
+              key={index}
+              index={index}
+              value={value}
+              id={id}
+              number={number}
+              onChange={onChange}
+            />
+          ))}
     </div>
   );
 }

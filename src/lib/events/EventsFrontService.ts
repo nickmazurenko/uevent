@@ -130,13 +130,13 @@ export default class EventFrontService {
 createGeneratePreviewEvent() {
   const eventData = this.eventData;
   const fileDataURL = this.filesDataURL;
-
   const generatePreviewEvent = () => {
     return {
       name: eventData.name,
       description: eventData.description,
       image: fileDataURL || "",
       startAt: eventData.startAt || "",
+      duration: (new Date(this.eventData.endAt).getTime() - new Date(this.eventData.startAt).getTime()),
       cost: eventData.cost,
       tickets: eventData.tickets,
       location: eventData.location,

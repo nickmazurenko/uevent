@@ -22,13 +22,13 @@ export type Props = {
 
 function EventForm({
   onSubmit,
-  eventData,
+  eventData: event,
   onDataChange,
   imageId,
   formType,
   loading,
 }: Props) {
-  const event = useMemo(() => eventData, [eventData]);
+  // const event = useMemo(() => eventData, [eventData]);
   return (
     <form
       onSubmit={onSubmit}
@@ -74,4 +74,5 @@ function EventForm({
   );
 }
 
-export default memo(EventForm);
+// export default memo(EventForm);
+export default EventForm;

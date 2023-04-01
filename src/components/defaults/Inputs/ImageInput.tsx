@@ -62,7 +62,6 @@ function ImageInput({
       <div className="relative text-transparent hover:text-red-700 " key={idx}>
         <AiOutlineClose
           onClick={() => {
-            console.log(idx);
             onChange({
               target: {
                 id: id,

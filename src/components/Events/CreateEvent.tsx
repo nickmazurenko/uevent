@@ -1,7 +1,12 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Button from "../defaults/Buttons/Button";
-import EventFrontService, { Currency, EventData } from "@/lib/events/EventsFrontService";
+import EventFrontService, {
+  Currency,
+  EventData,
+} from "@/lib/events/EventsFrontService";
 import EventForm from "./EventForm";
+import Event from "./Event";
+import { Tabs } from "flowbite-react";
 const eventImageId = "eventImages";
 
 export default function CreateEvent() {
@@ -11,7 +16,7 @@ export default function CreateEvent() {
     startAt: "",
     endAt: "",
     [eventImageId]: [],
-    cost: {amount: 0, currency: Currency.USD},
+    cost: { amount: 0, currency: Currency.USD },
     tickets: 0,
     location: JSON,
     tags: [],
@@ -31,49 +36,47 @@ export default function CreateEvent() {
 
   const generatePreviewEvent = service.createGeneratePreviewEvent();
   const handleEventDataChange = service.createHandleEventDataChange();
+  const eventImages = eventData[eventImageId];
 
   useEffect(() => {
-    let fileReader: FileReader,
-      isCancelled = false;
-
-    if (eventData[eventImageId]) {
-      const files = eventData[eventImageId];
-
-      for (let i = 0; i < files.length; i++) {
-        fileReader = new FileReader();
-        fileReader.onload = (e) => {
-          // @ts-ignore
-          const { result } = e.target;
-          if (result && !isCancelled) {
-            setFilesDataURL((prevDataUrls: string[]) => [...prevDataUrls, result]);
-          }
-        };
-        fileReader.readAsDataURL(files[i] as Blob);
+    if (eventImages) {
+      const urls = [];
+      // Loop through the files and generate URLs for each image
+      for (let i = 0; i < eventImages.length; i++) {
+        const file = eventImages[i];
+        const url = URL.createObjectURL(file);
+        urls.push(url);
       }
+
+      setFilesDataURL(urls);
     }
-
-    return () => {
-      isCancelled = true;
-      if (fileReader && fileReader.readyState === 1) {
-        fileReader.abort();
-      }
-    };
-  }, [eventData[eventImageId]]);
+  }, [eventImages]);
 
   const handleFormSubmit = service.createHandleFormSubmit("create");
 
   return (
-    <div className="flex flex-col items-center min-w-[35%]">
+    <div className="flex flex-col items-center min-w-[35%] gap-6">
       <h1 className="text-white mb-6">Create a new Event</h1>
-      <EventForm
-        onSubmit={handleFormSubmit}
-        // @ts-ignore
-        onDataChange={handleEventDataChange}
-        loading={loading}
-        imageId={eventImageId}
-        eventData={eventData}
-        formType="create"
-      />
+      <Tabs.Group>
+        <Tabs.Item title="Create Event">
+          <EventForm
+            onSubmit={handleFormSubmit}
+            // @ts-ignore
+            onDataChange={handleEventDataChange}
+            loading={loading}
+            imageId={eventImageId}
+            eventData={eventData}
+            formType="create"
+          />
+        </Tabs.Item>
+        <Tabs.Item title="Preview">
+          <Event
+            show={openPreview}
+            onClose={() => setOpenPreview(false)}
+            event={generatePreviewEvent()}
+          />
+        </Tabs.Item>
+      </Tabs.Group>
       <Button
         text="open preview"
         onClick={() => setOpenPreview(!openPreview)}

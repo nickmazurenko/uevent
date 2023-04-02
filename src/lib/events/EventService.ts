@@ -26,4 +26,11 @@ export default class EventService {
     });
     return newEvent;
   }
+
+  static async retrieveAll(organizationId ?: string, tags?: string[]) {
+    const events = await prisma.event.findMany({
+      where: { organizationId, tags}
+    });
+    return events;
+  }
 }

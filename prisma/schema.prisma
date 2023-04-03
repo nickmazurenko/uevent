@@ -50,6 +50,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   Organization  Organization[]
+  events       EventAttendee[]
 
   @@map(name: "users")
 }
@@ -78,15 +79,42 @@ model Organization {
 }
 
 model Event {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
-  name           String
-  image          String
-  cost           Float
-  tickets        Int
-  location       Json
-  tags           String[]
-  organization   Organization? @relation("OrganizationEvents", fields: [organizationId], references: [id])
-  organizationId String        @db.ObjectId
+  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  description      String
+  images           String[]
+  image_ids        String[]
+  image_signatures String[]
+  start_at         String
+  duration         Int
+  cost             Cost
+  tickets          Int
+  location         Json
+  tags             String[]
+  organizationId   String        @db.ObjectId
+  organization     Organization? @relation("OrganizationEvents", fields: [organizationId], references: [id])
+  attendees      EventAttendee[]
 
   @@map(name: "event")
+}
+
+model EventAttendee {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  eventId String  @db.ObjectId
+  event   Event   @relation(fields: [eventId], references: [id])
+  userId  String  @db.ObjectId
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@map(name: "event_attendee")
+}
+
+type Cost {
+  amount   Float
+  currency Currency
+}
+
+enum Currency {
+  USD
+  UAH
+  EUR
 }

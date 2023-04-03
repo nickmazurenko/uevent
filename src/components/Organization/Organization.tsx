@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { MouseEventHandler, useEffect, useState } from "react";
 import OrganizationSettings from "./OrganizationSettings";
 import Tabs, {TabData} from "./Tabs";
+import EventList from "../Events/EventList";
 
 const defaultTabs: TabData[] = [
     { selected: true, text: "Events" },
@@ -38,7 +39,7 @@ export default function Organization({ organization }: Props) {
 
         switch (selectedPage?.text) {
             case "Events":
-                return <div></div>
+                return <div><EventList events={organization?.events} /></div>
             case "News":
                 return <div></div>
             case "Settings":

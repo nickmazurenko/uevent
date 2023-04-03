@@ -19,6 +19,12 @@ const handler = nc({
     const user = await getUserByEmail(session.user?.email || "");
     const organization = await OrganizationService.getUserOrganization(user);
 
+    await prisma.event.deleteMany({
+        where: {
+            organizationId: organization?.id
+        }
+    })
+
     await prisma.organization.delete({
         where: {
             id: organization?.id

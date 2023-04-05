@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String  @map("user_id") @db.ObjectId
+  type               String
+  provider           String
+  providerAccountId  String  @map("provider_account_id")
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  oauth_token_secret String?
+  oauth_token        String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id") @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model User {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?        @unique
+  emailVerified DateTime?      @map("email_verified")
+  image         String?
+  createdAt     DateTime       @default(now()) @map(name: "created_at")
+  updatedAt     DateTime       @updatedAt @map(name: "updated_at")
+  accounts      Account[]
+  sessions      Session[]
+  Organization  Organization[]
+  events       EventAttendee[]
+
+  @@map(name: "users")
+}
+
+model VerificationToken {
+  identifier String   @id @map("_id")
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+model Organization {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  ownerId         String  @db.ObjectId
+  owner           User    @relation(fields: [ownerId], references: [id])
+  description     String
+  image           String
+  image_id        String
+  image_signature String
+  events          Event[] @relation("OrganizationEvents")
+
+  @@map(name: "organization")
+}
+
+model Event {
+  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  description      String
+  images           String[]
+  image_ids        String[]
+  image_signatures String[]
+  start_at         String
+  duration         Int
+  cost             Cost
+  tickets          Int
+  location         Json
+  tags             String[]
+  organizationId   String        @db.ObjectId
+  organization     Organization? @relation("OrganizationEvents", fields: [organizationId], references: [id])
+  attendees      EventAttendee[]
+
+  @@map(name: "event")
+}
+
+model EventAttendee {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  eventId String  @db.ObjectId
+  event   Event   @relation(fields: [eventId], references: [id])
+  userId  String  @db.ObjectId
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@map(name: "event_attendee")
+}
+
+type Cost {
+  amount   Float
+  currency Currency
+}
+
+enum Currency {
+  USD
+  UAH
+  EUR
+}

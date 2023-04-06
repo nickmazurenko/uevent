@@ -85,7 +85,8 @@ model Event {
   images           String[]
   image_ids        String[]
   image_signatures String[]
-  start_at         String
+  start_at         DateTime
+  created_at       DateTime @default(now())
   duration         Int
   cost             Cost
   tickets          Int

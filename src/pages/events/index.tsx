@@ -10,25 +10,27 @@ type Props = {
   event?: Event | undefined;
 };
 
-const EventsPage = ({events}: Props) => {
+const EventsPage = (props: Props) => {
   return (
     <Layout>
-      <CreateEvent/>
+      <CreateEvent />
     </Layout>
   );
-}
+};
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, options);
-  
-  if(!session || !session.user) {
-    return {redirect: '/signin'}
+
+  if (!session || !session.user) {
+    return { redirect: "/signin" };
   }
 
   // @ts-ignore
-  const organization = await OrganizationService.getUserOrganization(session.user);
+  const organization = await OrganizationService.getUserOrganization(
+    session.user
+  );
 
-  return {props: {organization}};
+  return { props: { organization } };
 }
 
 export default EventsPage;

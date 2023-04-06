@@ -4,12 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
-body, html {
-  background-color: #ededed ;
+body,
+html {
+  background-color: #111010;
+  font-family: "Lucida Console", Monaco, monospace;
 }
 
 .header {
-  background-color: #3f51b5 ;
+  background-color: #3f51b5;
 }
 
 .text-header {
@@ -17,15 +19,15 @@ body, html {
 }
 
 .button-color {
-  background-color: #3f51b5 ;
+  background-color: #3f51b5;
 }
 
 .button-text {
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .button-hover:hover {
-  background-color: #ff4081 ;
+  background-color: #ff4081;
 }
 
 .ReactTags__tags {

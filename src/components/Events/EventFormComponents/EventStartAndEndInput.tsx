@@ -1,5 +1,6 @@
 import { ChangeEventHandler } from "react";
 import DateTimeInput from "@/components/defaults/Inputs/DateTimeInput";
+import moment from "moment";
 
 type Props = {
   startAt: string;
@@ -16,7 +17,7 @@ export default function EventStartAndEndInput({
     <div className="flex flex-row gap-2">
       <div className="flex flex-col items-center w-full mb-6">
         <label>Start At</label>
-        <DateTimeInput value={startAt} handleChange={onChange} id="startAt" />
+        <DateTimeInput value={startAt} minDate={new Date() as unknown as string} handleChange={onChange} id="startAt" />
       </div>
       <div className="flex flex-col items-center w-full mb-6">
         <label>End At</label>

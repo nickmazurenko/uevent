@@ -69,7 +69,7 @@ export default class OrganizationService {
   static async getUserOrganization(user: User | null) {
     if (!user) return null;
 
-    return await prisma.organization.findFirst({
+    const organization = await prisma.organization.findFirst({
       where: {
         ownerId: user?.id,
       },
@@ -84,6 +84,14 @@ export default class OrganizationService {
         },
       },
     });
+    if (organization?.events)
+      organization.events = organization?.events.map((event) => ({
+        ...event,
+        start_at: event.start_at.toISOString(),
+        created_at: event.created_at.toISOString(),
+      }));
+
+    return organization;
   }
 
   static async retrieveOne(id: string) {

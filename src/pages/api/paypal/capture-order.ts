@@ -27,6 +27,7 @@ export default async function handle(
 
     const PaypalClient = client();
     const request = new paypal.orders.OrdersCaptureRequest(orderID);
+    // @ts-ignore
     request.requestBody({});
     const response = await PaypalClient.execute(request);
     if (!response) {

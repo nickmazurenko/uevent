@@ -1,17 +1,19 @@
 import moment from "moment";
 import SlideShow from "../defaults/SlideShow";
 import { EventData } from '../../lib/events/EventsFrontService';
+import Button from "../defaults/Buttons/Button";
+import BuyTicketButton from "./BuyTicketButton";
 
 type Props = {
   event: EventData;
+  eventId: string
 };
 
-export default function Event({ event }: Props) {
+export default function Event({ event, eventId }: Props) {
   const duration = moment.duration(event.duration);
 
-  const durationString = `${duration.days() ? duration.days() + " days" : ""} ${
-    duration.hours() ? duration.hours() + " hours" : ""
-  } ${duration.minutes() ? duration.minutes() + " minutes" : ""} `;
+  const durationString = `${duration.days() ? duration.days() + " days" : ""} ${duration.hours() ? duration.hours() + " hours" : ""
+    } ${duration.minutes() ? duration.minutes() + " minutes" : ""} `;
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full gap-4">
@@ -20,7 +22,10 @@ export default function Event({ event }: Props) {
         <p>{moment(event.startAt).format("LLLL")}</p>
         <p>{moment(event.startAt).fromNow()}</p>
       </div>
-      <SlideShow images={event.image} />
+      <div>
+        <BuyTicketButton {...{ eventId }} />
+      </div>
+      {event.image && <SlideShow images={event.image} />}
       <div className="flex flex-col gap-4 w-full justify-center">
         <p>Duration: {durationString}</p>
         <div className="flex flex-wrap w-full gap-4">
@@ -41,6 +46,9 @@ export default function Event({ event }: Props) {
             <span className="font-bold text-xl">Amount of tickets left</span>
             <p>{event.tickets}</p>
           </div>
+          <div>
+
+          </div>
         </div>
         {event.location.type === "online" && (
           <div className="flex flex-row w-1/2 justify-between">
@@ -52,11 +60,9 @@ export default function Event({ event }: Props) {
           <div className="flex flex-row w-full justify-between">
             <span className="font-bold text-xl">Location</span>
             <a
-              href={`https://www.google.com/maps/search/?api=1&query=${
-                event.location.place.coordinates.lat
-              },${event.location.place.coordinates.lng}&zoom=${15}&markers=${
-                event.location.place.coordinates.lat
-              },${event.location.place.coordinates.lng}`}
+              href={`https://www.google.com/maps/search/?api=1&query=${event.location.place.coordinates.lat
+                },${event.location.place.coordinates.lng}&zoom=${15}&markers=${event.location.place.coordinates.lat
+                },${event.location.place.coordinates.lng}`}
               className="text-sm border-bottom border-blue-800 text-blue-800"
             >
               GOOGLE MAPS

@@ -131,11 +131,12 @@ model Ticket {
 }
 
 model Payment {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  orderID   String?
-  status    String
-  createdAt DateTime @default(now())
-  expiry    DateTime
-  event     Event    @relation("Payments", fields: [eventId], references: [id])
-  eventId   String   @db.ObjectId
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderID      String?
+  status       String
+  createdAt    DateTime @default(now())
+  expiry       DateTime
+  event        Event    @relation("Payments", fields: [eventId], references: [id])
+  eventId      String   @db.ObjectId
+  ticketsCount Int
 }

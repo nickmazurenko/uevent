@@ -26,10 +26,9 @@ const formatterUSD = new Intl.NumberFormat("en-US", {
     maximumSignificantDigits: 2,
 });
 
-const calcValueWithPaypalFee = function (valueInUSD: number) {
-    // values in cents
+const calcDineroPayPalFee = function (amount: number) {
     let itemValue = Dinero({
-        amount: valueInUSD * 100,
+        amount: amount,
         currency: "USD",
     });
     const defaultFee = Dinero({ amount: 48, currency: "USD" });
@@ -41,8 +40,28 @@ const calcValueWithPaypalFee = function (valueInUSD: number) {
 
     const value = itemValue.add(adderFee);
 
+    return value;
+};
+
+const calcValueWithPaypalFee = function (valueInUSD: number) {
+    // values in cents
+    // let itemValue = Dinero({
+    //     amount: valueInUSD * 100,
+    //     currency: "USD",
+    // });
+    // const defaultFee = Dinero({ amount: 48, currency: "USD" });
+    // const defaultPercentage = 4;
+
+    // itemValue = itemValue.add(defaultFee);
+
+    // const adderFee = itemValue.percentage(defaultPercentage);
+
+    // const value = itemValue.add(adderFee);
+
+    const value = calcDineroPayPalFee(valueInUSD * 100);
+
     return value.toFormat("0.00");
 };
 
 export default client;
-export { calcValueWithPaypalFee };
+export { calcValueWithPaypalFee, calcDineroPayPalFee };

@@ -4,10 +4,10 @@ import { useMutation } from "react-query";
 import { PayPalScriptProvider, PayPalButtons, FUNDING } from "@paypal/react-paypal-js";
 import axios, { AxiosError } from "axios";
 
-const BuyTicketButton = ({ eventId }: { eventId: string }) => {
+const PayPalButton = ({ eventId, ticketsCount }: { eventId: string, ticketsCount: number }) => {
 
     const createMutation = useMutation<{ data: any }, AxiosError, any, Response>(
-        (): any => axios.post('/api/paypal/create-order', { eventId }),
+        (): any => axios.post('/api/paypal/create-order', { eventId, ticketsCount }),
     )
     const captureMutation = useMutation<string, AxiosError, any, Response>(
         (data): any => axios.post('/api/paypal/capture-order', data),
@@ -26,9 +26,9 @@ const BuyTicketButton = ({ eventId }: { eventId: string }) => {
     return (
         <div>
             <main>
-                {captureMutation.data && (
+                {/* {captureMutation.data && (
                     <div>{JSON.stringify(captureMutation.data)}</div>
-                )}
+                )} */}
                 <PayPalScriptProvider
                     options={{
                         'client-id': paypalClientID,
@@ -64,4 +64,4 @@ interface OnApproveData {
     authCode?: string | null
 }
 
-export default BuyTicketButton;
+export default PayPalButton;

@@ -44,7 +44,8 @@ export default async function handle(
             where: { id: payment.eventId },
         });
 
-        if (event) await EventService.buyTickets(event, user.id, 1);
+        if (event)
+            await EventService.buyTickets(event, user.id, payment.ticketsCount);
 
         // TODO: add one more status for payment (tickets created)
     }

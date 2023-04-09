@@ -12,15 +12,17 @@ export default class PaymentsService {
         });
     }
 
-    static async isEventHasTickets(event: Event) {
+    static async isEventHasTickets(event: Event, ticketsCount?: number) {
         const pendingPayments = await PaymentsService.getPendingPayments(
             event.id
         );
 
-        return event.tickets - pendingPayments.length >= 0;
+        if (ticketsCount === undefined) ticketsCount = 1;
+
+        return event.tickets - pendingPayments.length - ticketsCount >= 0;
     }
 
-    static async createPayment(eventId: string) {
+    static async createPayment(eventId: string, ticketsCount: number) {
         const minutesToExpired = 2;
 
         const expiry = new Date(
@@ -32,6 +34,7 @@ export default class PaymentsService {
                 eventId,
                 status: "PENDING",
                 expiry,
+                ticketsCount,
             },
         });
 

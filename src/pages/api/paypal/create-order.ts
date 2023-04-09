@@ -10,7 +10,10 @@ export default async function handle(
 ) {
     const PaypalClient = client();
 
-    const { eventId } = req.body as { eventId: string };
+    const { eventId, ticketsCount } = req.body as {
+        eventId: string;
+        ticketsCount: number;
+    };
 
     const event = await prisma.event.findFirst({
         where: {
@@ -22,20 +25,23 @@ export default async function handle(
         return res.status(404).end("Event not found");
     }
 
-    const isEventHasTickets = await PaymentsService.isEventHasTickets(event);
+    const isEventHasTickets = await PaymentsService.isEventHasTickets(
+        event,
+        ticketsCount
+    );
     if (!isEventHasTickets) {
         return res.status(400).end("All tickets are sold out");
     }
 
-    const payment = await PaymentsService.createPayment(event.id);
+    const payment = await PaymentsService.createPayment(event.id, ticketsCount);
 
-    let eventCost = event.cost.amount;
+    let orderCost = event.cost.amount * ticketsCount;
 
     if (event.cost.currency !== "USD") {
         // translate to USD
     }
 
-    const value = calcValueWithPaypalFee(eventCost);
+    const value = calcValueWithPaypalFee(orderCost);
 
     const request = new paypal.orders.OrdersCreateRequest();
     request.headers["Prefer"] = "return=representation";

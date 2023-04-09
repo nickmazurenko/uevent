@@ -2,7 +2,7 @@ import moment from "moment";
 import SlideShow from "../defaults/SlideShow";
 import { EventData } from '../../lib/events/EventsFrontService';
 import Button from "../defaults/Buttons/Button";
-import BuyTicketButton from "./BuyTicketButton";
+import BuyTicketsButton from "./BuyTicketsButton";
 
 type Props = {
   event: EventData;
@@ -23,7 +23,8 @@ export default function Event({ event, eventId }: Props) {
         <p>{moment(event.startAt).fromNow()}</p>
       </div>
       <div>
-        <BuyTicketButton {...{ eventId }} />
+        {/* <PayPalButton {...{ eventId }} /> */}
+        <BuyTicketsButton {...{ event, eventId }} />
       </div>
       {event.image && <SlideShow images={event.image} />}
       <div className="flex flex-col gap-4 w-full justify-center">

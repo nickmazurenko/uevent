@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import SignInModal from "./SignInModal";
 import Image from "next/image";
 import { User } from "@prisma/client";
+import Organization from './Organization/Organization';
 
 const Header: React.FC = () => {
   const { data: session, status } = useSession();
@@ -118,9 +119,9 @@ function ProfileMenu({ user }: { user: User }) {
           {user.email}
         </span>
       </Dropdown.Header>
-      <Dropdown.Item>Dashboard</Dropdown.Item>
+      <Dropdown.Item>Profile</Dropdown.Item>
       <Dropdown.Item>Settings</Dropdown.Item>
-      <Dropdown.Item>Earnings</Dropdown.Item>
+      <Dropdown.Item>Organization</Dropdown.Item>
       <Dropdown.Divider />
       <Dropdown.Item onClick={() => signOut()}>Sign out</Dropdown.Item>
     </Dropdown>

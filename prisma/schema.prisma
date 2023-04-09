@@ -40,17 +40,18 @@ model Session {
 }
 
 model User {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  email         String?        @unique
-  emailVerified DateTime?      @map("email_verified")
+  email         String?         @unique
+  emailVerified DateTime?       @map("email_verified")
   image         String?
-  createdAt     DateTime       @default(now()) @map(name: "created_at")
-  updatedAt     DateTime       @updatedAt @map(name: "updated_at")
+  createdAt     DateTime        @default(now()) @map(name: "created_at")
+  updatedAt     DateTime        @updatedAt @map(name: "updated_at")
   accounts      Account[]
   sessions      Session[]
   Organization  Organization[]
-  events       EventAttendee[]
+  events        EventAttendee[]
+  tickets       Ticket[]        @relation("UserTickets")
 
   @@map(name: "users")
 }
@@ -79,7 +80,7 @@ model Organization {
 }
 
 model Event {
-  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  id               String          @id @default(auto()) @map("_id") @db.ObjectId
   name             String
   description      String
   images           String[]
@@ -92,19 +93,21 @@ model Event {
   tickets          Int
   location         Json
   tags             String[]
-  organizationId   String        @db.ObjectId
-  organization     Organization? @relation("OrganizationEvents", fields: [organizationId], references: [id])
-  attendees      EventAttendee[]
+  organizationId   String          @db.ObjectId
+  organization     Organization?   @relation("OrganizationEvents", fields: [organizationId], references: [id])
+  attendees        EventAttendee[]
+  purchasedTickets Ticket[]        @relation("PurchasedTickets")
+  payments         Payment[]       @relation("Payments")
 
   @@map(name: "event")
 }
 
 model EventAttendee {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  eventId String  @db.ObjectId
-  event   Event   @relation(fields: [eventId], references: [id])
-  userId  String  @db.ObjectId
-  user    User    @relation(fields: [userId], references: [id])
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  eventId String @db.ObjectId
+  event   Event  @relation(fields: [eventId], references: [id])
+  userId  String @db.ObjectId
+  user    User   @relation(fields: [userId], references: [id])
 
   @@map(name: "event_attendee")
 }
@@ -118,4 +121,23 @@ enum Currency {
   USD
   UAH
   EUR
+}
+
+model Ticket {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  user    User   @relation("UserTickets", fields: [userId], references: [id])
+  userId  String @db.ObjectId
+  event   Event  @relation("PurchasedTickets", fields: [eventId], references: [id])
+  eventId String @db.ObjectId
+}
+
+model Payment {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderID      String?
+  status       String
+  createdAt    DateTime @default(now())
+  expiry       DateTime
+  event        Event    @relation("Payments", fields: [eventId], references: [id])
+  eventId      String   @db.ObjectId
+  ticketsCount Int
 }

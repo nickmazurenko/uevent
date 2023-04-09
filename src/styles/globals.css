@@ -119,3 +119,8 @@ html {
   background: none;
   color: white;
 }
+
+[data-testid="flowbite-tooltip"] {
+  background-color: #1A1A1A !important;
+  border-radius: 20px;
+}

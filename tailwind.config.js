@@ -2,6 +2,7 @@
 module.exports = {
   content: [
     "./node_modules/flowbite-react/**/*.js",
+    "./node_modules/flowbite/**/*.js",
     "./src/pages/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
     "./src/app/**/*.{js,ts,jsx,tsx}",
@@ -15,8 +16,8 @@ module.exports = {
     },
     extend: {
       blur: {
-        small: '3px'
-      }
+        small: "3px",
+      },
     },
   },
   plugins: [require("flowbite/plugin")],

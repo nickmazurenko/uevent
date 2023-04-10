@@ -32,7 +32,7 @@ const handler = nc({
     if(!organization) {
       return res.status(400).json('Cannot create an event without organization');
     }
-
+    
     const eventFormParser = new EventFormParser({requiredFields: EventFormFields.All});
     const {
       name,
@@ -58,7 +58,7 @@ const handler = nc({
           organization as Organization,
           name as string,
           description as string,
-          startAt as string,
+          new Date(startAt as string) as Date,
           duration as number,
           cloudinaryImages,
           tickets as number,

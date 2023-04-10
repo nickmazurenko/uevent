@@ -6,7 +6,7 @@ function OrganizationPage({ organization }: { organization: Org }) {
   return <Organization organization={organization} />;
 }
 
-export async function getServerSideProps(context : GetServerSidePropsContext) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   // @ts-ignore
   const { id } = context.params;
   const organization = await prisma.organization.findUnique({
@@ -24,6 +24,13 @@ export async function getServerSideProps(context : GetServerSidePropsContext) {
       },
     },
   });
+
+  if (organization?.events)
+    organization.events = organization?.events.map((event) => ({
+      ...event,
+      start_at: event.start_at.toISOString(),
+      created_at: event.created_at.toISOString(),
+    }));
 
   return {
     props: {

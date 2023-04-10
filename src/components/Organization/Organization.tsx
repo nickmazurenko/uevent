@@ -8,6 +8,7 @@ import EventList from "../Events/EventList";
 const defaultTabs: TabData[] = [
     { selected: true, text: "Events" },
     { selected: false, text: "News" },
+    { selected: false, text: "Settings" },
 ] 
 
 export type Props = {

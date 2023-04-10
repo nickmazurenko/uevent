@@ -93,8 +93,8 @@ model Event {
   tickets          Int
   location         Json
   tags             String[]
-  organizationId   String          @db.ObjectId
-  organization     Organization?   @relation("OrganizationEvents", fields: [organizationId], references: [id])
+  organizationId   String?          @db.ObjectId
+  organization     Organization?   @relation("OrganizationEvents", fields: [organizationId], references: [id], onDelete: SetNull)
   attendees        EventAttendee[]
   purchasedTickets Ticket[]        @relation("PurchasedTickets")
   payments         Payment[]       @relation("Payments")

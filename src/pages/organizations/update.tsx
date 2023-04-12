@@ -24,7 +24,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const session = await getServerSession(context.req, context.res, options);
 
     if (!session || !session.user) {
-        return { redirect: '/signin' }
+        return {
+            redirect: {
+              permanent: false,
+              destination: "/",
+            },
+            props: {},
+          };
     }
 
 
@@ -32,7 +38,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const organization = await OrganizationService.getUserOrganization(session.user);
 
     if (!organization) {
-        return { redirect: '/organizations' }
+        return {
+            redirect: {
+              permanent: false,
+              destination: "/organizations",
+            },
+            props: {},
+          };
     }
 
 

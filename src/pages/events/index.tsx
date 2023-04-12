@@ -18,33 +18,11 @@ type Props = {
   tags?: string[] | undefined;
 };
 
-export const enum SortOptions {
-  price = "Price",
-  ticketNumber = "Number of Tickets",
-  peopleNumber = "Number of People",
-  date = "Date",
-}
-
-export type Sort = {
-  option: SortOptions;
-  asc: boolean;
-};
-
 const EventsPage = (props: Props) => {
   const [chosenTags, setChosenTags] = useState<string[]>([]);
-  const [eventType, setEventType] = useState<string | null>(null);
-  const [sort, setSort] = useState<Sort | null>(null);
   const [filteredEvents, setFilteredEvents] = useState<Event[] | undefined>(
     props.events
   );
-
-  const onSortClick = (option: SortOptions) => {
-    if (option === sort?.option) {
-      setSort({ ...sort, asc: !sort.asc });
-    } else {
-      setSort({ option, asc: true });
-    }
-  };
 
   const onTagClick = (e: { target: { id: string } }) => {
     const tag = e.target.id;
@@ -54,23 +32,24 @@ const EventsPage = (props: Props) => {
         setChosenTags([...chosenTags, tag]);
   };
 
-  console.log(sort);
-
   useEffect(() => {
-    eventType === "online" &&
+    if (chosenTags.length > 0) {
       setFilteredEvents(
-        props.events?.filter((event) => event.location.type === "online")
+        props.events?.filter((event) =>
+          chosenTags.every((tag) => event.tags.includes(tag))
+        )
       );
-    eventType === "offline" &&
-      setFilteredEvents(
-        props.events?.filter((event) => event.location.type === "offline")
-      );
+    } else {
+      setFilteredEvents(props.events);
+    }
+  }, [chosenTags]);
 
-      // add sort and search
-
-
-    if (!eventType) setFilteredEvents(props.events);
-  }, [eventType, props.events]);
+  const onEventTypeClick = (eventType: string) => {
+    console.log(eventType);
+    setFilteredEvents(
+      props.events?.filter((event) => event.location.type === eventType)
+    );
+  };
 
   return (
     <Layout>
@@ -80,18 +59,12 @@ const EventsPage = (props: Props) => {
           <TagList
             chosen={chosenTags}
             onTagClick={onTagClick}
-            setEventType={setEventType}
+            setEventType={onEventTypeClick}
             className="w-full md:w-1/4"
             tags={props.tags as string[]}
           />
           <div className="w-full md:w-3/4">
-            <EventsList
-              sort={sort}
-              setSort={onSortClick}
-              events={filteredEvents.filter((event) =>
-                chosenTags.every((tag) => event.tags.includes(tag))
-              )}
-            />
+            <EventsList events={filteredEvents} />
           </div>
           <div className="w-full h-full p-5 pt-10">
             <ContactUs />

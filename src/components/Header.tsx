@@ -100,7 +100,6 @@ function ProfileMenu({ user }: { user: User }) {
     <Dropdown
       arrowIcon={false}
       inline={true}
-      id="test"
       label={
         <div className="relative w-[40px] h-[40px] flex items-center justify-center">
           <Image

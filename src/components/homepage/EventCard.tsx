@@ -21,7 +21,7 @@ export default function EventCard({ event }: { event: Event }) {
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative w-[90vw] h-[100vw] md:w-[20vw] md:h-[25vw] overflow-hidden rounded-xl"
+      className="relative w-[90vw] h-[100vw] md:w-[25vw] md:h-[30vw] overflow-hidden rounded-xl"
     >
       <Image
         alt="EventThumbnail"
@@ -49,14 +49,14 @@ export default function EventCard({ event }: { event: Event }) {
             transition={{ duration: 0.5 }}
             className="flex-col gap-16 absolute bottom-0 z-20 h-full backdrop-blur-lg w-full text-ueventText text-2xl text-center items-center justify-center flex"
           >
-            <span className="p-5">
+            <span className="p-5 absolute top-5">
               {`${event.name} ${
                 event.location.type === "offline"
                   ? event.location.place.city
                   : ""
               }`}
             </span>
-            <div className="flex flex-col gap-4 z-30 text-base w-full align-bottom p-5">
+            <div className="flex flex-col gap-5 z-30 text-base w-full align-bottom p-5">
               <div className="flex flex-row w-full justify-between">
                 <span className="flex gap-5 items-center justify-center">
                   <ImLocation size={20} />
@@ -90,7 +90,7 @@ export default function EventCard({ event }: { event: Event }) {
               </div>
               <Link
                 href={`/events/${event.id}`}
-                className="p-3 w-1/2 self-center mt-5 text-ueventContrast bg-opacity-50 bg-ueventBg rounded-xl"
+                className="p-3 w-1/2 self-center absolute bottom-5 mt-5 text-ueventContrast bg-opacity-50 bg-ueventBg rounded-xl"
               >
                 More Info
               </Link>

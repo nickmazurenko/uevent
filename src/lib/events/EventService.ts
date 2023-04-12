@@ -145,4 +145,15 @@ export default class EventService {
       ticketsCount: ticketsPayload.count,
     };
   }
+
+  static async retrieveTags() {
+    const events = await prisma.event.findMany({
+      select: {
+        tags: true,
+      },
+    });
+    const tags = [...new Set(events.flatMap((event) => event.tags))];
+
+    return tags;
+  }
 }

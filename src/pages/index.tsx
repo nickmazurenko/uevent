@@ -6,6 +6,7 @@ import { GetServerSidePropsContext } from "next";
 import EventService, { Filter } from "@/lib/events/EventService";
 import { useEffect, useState } from "react";
 import GatherwiseDesc from "@/components/defaults/GatherwiseDesc";
+import Locale from "@/locales/locales";
 
 export default function Home(props: { events: Event[] }) {
   const [events, setEvents] = useState<Event[]>(props.events);

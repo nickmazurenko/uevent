@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { HiMenu, HiSearch } from "react-icons/hi";
@@ -7,17 +7,25 @@ import { useRouter } from "next/router";
 import SignInModal from "./SignInModal";
 import Image from "next/image";
 import { User } from "@prisma/client";
-import Organization from './Organization/Organization';
+import Organization from "./Organization/Organization";
+import { useTranslations } from "next-intl";
 
 const Header: React.FC = () => {
+  const localStorage =
+    typeof window !== "undefined" ? window.localStorage : null;
   const { data: session, status } = useSession();
-
+  const t = useTranslations();
   const [show, setShow] = useState(false);
-
+  const [locale, setLocale] = useState(t("locale"));
   const onClick = () => setShow(!show);
   const onClose = () => setShow(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    setLocale(localStorage?.getItem("locale") as string);
+  }, [localStorage]);
+
   return (
     <React.Fragment>
       <Navbar
@@ -32,13 +40,28 @@ const Header: React.FC = () => {
         <div className="flex md:order-2 gap-4 bg-transparent mt-1">
           <div className="relative flex items-center self-center">
             <input
-              className="relative rounded-lg bg-ueventSecondary border-ueventText border-2 text-sm p-2 pl-14"
-              placeholder="Search"
+              className="relative rounded-lg bg-ueventSecondary w-11/12 md:w-full border-ueventText border-2 text-sm p-2 pl-14"
+              placeholder={t("search")}
             />
             <HiSearch
               size={30}
               className="text-ueventText absolute left-0 ml-3"
             />
+          </div>
+          <div
+            className="self-center cursor-pointer text-ueventText text-xs"
+            onClick={() => {
+              localStorage?.setItem("locale", locale === "en" ? "uk" : "en");
+              router.reload();
+            }}
+          >
+            <span className={locale === "en" ? "text-ueventContrast" : ""}>
+              EN
+            </span>
+            /
+            <span className={locale === "uk" ? "text-ueventContrast" : ""}>
+              UK
+            </span>
           </div>
           {session?.user ? (
             <ProfileMenu user={session?.user as User} />
@@ -49,10 +72,9 @@ const Header: React.FC = () => {
               onClick={onClick}
               className="rounded-lg bg-ueventContrast md:text-base text-xs text-ueventText p-1"
             >
-              Log In
+              {t("login")}
             </button>
           )}
-
           <Navbar.Toggle className="h-[32px]" />
         </div>
         <Navbar.Collapse className="text-ueventText text-center mt-3">
@@ -62,7 +84,7 @@ const Header: React.FC = () => {
             }`}
             href="/"
           >
-            Home
+            {t("home")}
           </Link>
           <Link
             href="/events"
@@ -70,7 +92,7 @@ const Header: React.FC = () => {
               router.asPath === "/events" ? "text-ueventContrast" : ""
             }`}
           >
-            Events
+            {t("events")}
           </Link>
           <Link
             href="/news"
@@ -78,7 +100,7 @@ const Header: React.FC = () => {
               router.asPath === "/news" ? "text-ueventContrast" : ""
             }`}
           >
-            News
+            {t("news")}
           </Link>
           <Link
             href="/reviews"
@@ -86,7 +108,7 @@ const Header: React.FC = () => {
               router.asPath === "/reviews" ? "text-ueventContrast" : ""
             }`}
           >
-            Reviews
+            {t("reviews")}
           </Link>
         </Navbar.Collapse>
       </Navbar>
@@ -114,9 +136,7 @@ function ProfileMenu({ user }: { user: User }) {
     >
       <Dropdown.Header>
         <span className="block text-sm">{user.name}</span>
-        <span className="block truncate text-sm font-medium">
-          {user.email}
-        </span>
+        <span className="block truncate text-sm font-medium">{user.email}</span>
       </Dropdown.Header>
       <Dropdown.Item>Profile</Dropdown.Item>
       <Dropdown.Item>Settings</Dropdown.Item>

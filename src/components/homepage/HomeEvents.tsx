@@ -4,6 +4,7 @@ import { Tabs, TabsRef, Button } from "flowbite-react";
 import EventList from "./EventList";
 import { Event } from "@prisma/client";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 // import { Filter } from "@/lib/events/EventService";
 
 export default function HomeEvents(props: {
@@ -13,13 +14,11 @@ export default function HomeEvents(props: {
   setFilter: (filter: string) => void;
 }) {
   const [activeTab, setActiveTab] = useState<string>("upcoming");
-
+  const t = useTranslations();
   const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setActiveTab(e.currentTarget.name);
     props.setFilter(e.currentTarget.name as string);
   };
-
-  console.log(activeTab === "new" ? "text-ueventContrast" : "");
 
   return (
     <div
@@ -36,7 +35,7 @@ export default function HomeEvents(props: {
             activeTab === "today" ? "text-ueventContrast" : "text-ueventText"
           }`}
         >
-          Today
+          {t("today")}
         </button>
         <div className="text-2xl">|</div>
         <button
@@ -46,7 +45,7 @@ export default function HomeEvents(props: {
             activeTab === "upcoming" ? "text-ueventContrast" : "text-ueventText"
           }`}
         >
-          Upcoming
+          {t("upcoming")}
         </button>
         <div className="text-2xl">|</div>
         <button
@@ -56,7 +55,7 @@ export default function HomeEvents(props: {
             activeTab === "new" ? "text-ueventContrast" : "text-ueventText"
           }`}
         >
-          New
+          {t("new")}
         </button>
         <div className="text-2xl">|</div>
         <button
@@ -66,11 +65,16 @@ export default function HomeEvents(props: {
             activeTab === "specials" ? "text-ueventContrast" : "text-ueventText"
           }`}
         >
-          Specials
+          {t("specials")}
         </button>
       </div>
       <EventList events={props.events} />
-      <Link href="/events" className="p-2 self-center w-1/2 md:w-1/12 text-center text-ueventContrast border-2 rounded-xl hover:border-ueventContrast hover:text-ueventText hover:bg-ueventContrast">Other</Link>
+      <Link
+        href="/events"
+        className="p-2 self-center w-1/2 md:w-1/12 text-center text-ueventContrast border-2 rounded-xl hover:border-ueventContrast hover:text-ueventText hover:bg-ueventContrast"
+      >
+        {t("other")}
+      </Link>
     </div>
   );
 }

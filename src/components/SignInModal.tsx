@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "flowbite-react";
-import { ClientSafeProvider, getCsrfToken, getProviders, signIn } from "next-auth/react";
+import {
+  ClientSafeProvider,
+  getCsrfToken,
+  getProviders,
+  signIn,
+} from "next-auth/react";
 import { AppProvider } from "next-auth/providers";
-import { AiFillGoogleSquare, AiFillGithub, AiOutlineClose } from "react-icons/ai";
+import {
+  AiFillGoogleSquare,
+  AiFillGithub,
+  AiOutlineClose,
+} from "react-icons/ai";
 
 export default function SignInModal({
   show,
@@ -25,7 +34,6 @@ export default function SignInModal({
 
     const fetchProviders = async () => {
       const providers = await getProviders();
-      console.log(providers);
       // @ts-ignore
       setProviders(providers);
     };
@@ -43,7 +51,11 @@ export default function SignInModal({
       dismissible={true}
     >
       <Modal.Body className="drop-shadow-2xl flex flex-col justify-center items-center bg-ueventSecondary rounded-lg">
-        <AiOutlineClose size={20} className="text-ueventText hover:text-ueventContrast cursor-pointer absolute top-5 right-5" onClick={onClose} />
+        <AiOutlineClose
+          size={20}
+          className="text-ueventText hover:text-ueventContrast cursor-pointer absolute top-5 right-5"
+          onClick={onClose}
+        />
         <h1 className="text-4xl py-20 text-ueventText">GATHERWISE</h1>
         <div className="max-w-sm w-full rounded-lg shadow dark:bg-transparent dark:border-gray-700">
           <EmailForm csrfToken={token} />

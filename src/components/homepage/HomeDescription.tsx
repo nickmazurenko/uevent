@@ -1,8 +1,10 @@
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { ReactPropTypes } from "react";
 import { AiOutlineLaptop } from "react-icons/ai";
 
 export default function Description(props: { className?: string }) {
+  const t = useTranslations();
   return (
     <div className={`relative ${props.className}`}>
       <img
@@ -59,27 +61,23 @@ export default function Description(props: { className?: string }) {
             />
           </svg>
           <span className="monserat tracking-wider text-ueventText font-extrabold lg:text-5xl w-2/3 text-xl">
-            IMAGINE THE SITUATION.
+            {t("descHeader")}
           </span>
           <p className="text-xs lg:text-xl roboto text-ueventText font-bold tracking-wide">
-            You want to attend an event in another city. You buy tickets for the
-            event, find the best way to travel, search for accommodation. After
-            all this, you are alone all day or half-day before the beginning of
-            the event for which you are there. Once the event is finished, you
-            notice some of your acquaintances.
+            {t("desc")}
           </p>
           <div className="flex flex-row lg:flex-col gap-4 w-full lg:w-1/2">
             <Link
               className="bg-ueventContrast text-center text-ueventText p-3 rounded-lg"
               href="/events/create"
             >
-              Create event
+              {t("create")}
             </Link>
             <Link
               className="border-2 border-ueventContrast text-center text-ueventText p-3 rounded-lg"
               href="/events"
             >
-              Join Event
+              {t("join")}
             </Link>
           </div>
         </div>

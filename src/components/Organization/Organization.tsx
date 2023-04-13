@@ -2,86 +2,97 @@ import { Organization as Org } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { MouseEventHandler, useEffect, useState } from "react";
 import OrganizationSettings from "./OrganizationSettings";
-import Tabs, {TabData} from "./Tabs";
-import EventList from "../Events/EventList";
+import Tabs, { TabData } from "./Tabs";
+import Image from "next/image";
+import moment from "moment";
+import EventsList from "../eventspage/EventsList";
+import CreateOrganization from "./CreateOrganization";
 
 const defaultTabs: TabData[] = [
-    { selected: true, text: "Events" },
-    { selected: false, text: "News" },
-    { selected: false, text: "Settings" },
-] 
+  { selected: true, text: "Events" },
+  { selected: false, text: "News" },
+  { selected: false, text: "Settings" },
+];
 
 export type Props = {
-    organization: Org
-}
+  organization: Org;
+};
 
 export default function Organization({ organization }: Props) {
+  const { data: session } = useSession();
+  const user = session?.user;
 
-    const {data: session} = useSession();
-    const user = session?.user;
+  const [tabs, setTabs] = useState(defaultTabs);
 
-    const [tabs, setTabs] = useState(defaultTabs);
+  const handleTabSelect: MouseEventHandler<HTMLSpanElement> = (e) => {
+    const clickedId = e.target.id;
 
-    const handleTabSelect: MouseEventHandler<HTMLSpanElement> = (e) => {
-        const clickedId = e.target.id;
+    const tabsCopy = [...tabs];
+    tabsCopy.forEach((tab) => {
+      if (tab.text === clickedId) tab.selected = true;
+      else tab.selected = false;
+    });
 
-        const tabsCopy = [...tabs];
-        tabsCopy.forEach((tab) => {
-            if (tab.text === clickedId) tab.selected = true;
-            else tab.selected = false;  
-        });
+    setTabs(tabsCopy);
+  };
 
-        setTabs(tabsCopy);
+  const selectPage = () => {
+    const selectedPage = tabs.find((tab) => tab.selected);
 
+    switch (selectedPage?.text) {
+      case "Events":
+        return (
+          <div>
+            <EventsList events={organization.events} />
+          </div>
+        );
+      case "News":
+        return <div></div>;
+      case "Settings":
+        return <OrganizationSettings />;
     }
+  };
 
-    const selectPage = () => {
-        const selectedPage = tabs.find((tab) => tab.selected);
-
-        switch (selectedPage?.text) {
-            case "Events":
-                return <div><EventList events={organization?.events} /></div>
-            case "News":
-                return <div></div>
-            case "Settings":
-                return <OrganizationSettings />
-        }
+  useEffect(() => {
+    if (organization?.owner?.email == user?.email && tabs.length < 3) {
+      setTabs([...tabs, { selected: false, text: "Settings" }]);
     }
-
-    useEffect(() => {
-        console.log(organization);
-        if (organization?.owner?.email == user?.email && tabs.length < 3) {
-            setTabs([...tabs, { selected: false, text: "Settings" }]);
-        };
-
-    }, [session?.user]);
-
-    return (
-        <div className="Organization text-white w-full text-center flex flex-col content-center">
-
-            <div id="organization-image" className="flex justify-center mb-6" >
-                <img className="" src={organization.image}></img>
+  }, [session?.user]);
+  return (
+    <div
+      style={{ boxShadow: "0px 10px 16px 3px black" }}
+      className="w-full h-full flex flex-col py-5 bg-ueventSecondary rounded-2xl gap-2 justify-center justify-items-center items-center"
+    >
+      {organization ? (
+        <>
+          <div className="text-ueventText flex flex-col w-full p-5 md:flex-row gap-5 justify-center items-start md:justify-between">
+            <div className="flex flex-row gap-8 items-center justify-center w-full">
+              <div className="flex flex-row gap-5 items-center">
+                <Image
+                  src={organization.image as string}
+                  className="rounded-full"
+                  width="120"
+                  height="120"
+                  alt="avatar"
+                />
+                <div className="flex flex-col w-full gap-2">
+                  <span className="text-2xl">{organization?.name}</span>
+                  <span className="text-xs text-gray-500">
+                    {organization?.description}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    Registered {moment(organization?.createdAt).fromNow()}
+                  </span>
+                </div>
+              </div>
             </div>
-
-            <div id="organization-name" className="mb-6">
-                <h1 className="text-4xl">{organization.name}</h1>
-            </div>
-
-            <div id="organization-description" className="mb-6">
-                <p>{organization.description}</p>
-            </div>
-
-            <div id="organization-data" className="flex justify-center">
-                <Tabs tabs={tabs} handleSelect={handleTabSelect}></Tabs>
-            </div>
-
-            <div id="organization-data-page">
-                {
-                    selectPage()
-                }
-            </div>
-
-        </div>
-    )
-
+          </div>
+          <Tabs tabs={tabs} handleSelect={handleTabSelect}></Tabs>
+          <div id="organization-data-page">{selectPage()}</div>
+        </>
+      ) : (
+        <CreateOrganization />
+      )}
+    </div>
+  );
 }

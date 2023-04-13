@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { User } from '@prisma/client'
-import EventsList from './eventspage/EventsList'
+import EventsList from '@/components/eventspage/EventsList';
 import moment from 'moment'
 
 type Props = {
@@ -35,6 +35,7 @@ export default function UserCard({ user }: Props) {
         <button className="p-2 text-ueventContrast w-full md:w-1/4">Connect Chronos</button>
       </div>
       <span className="text-xl text-ueventText">Latest Events</span>
+      {/* @ts-ignore */}
       <EventsList className='w-full' removeMenu={true} events={user?.tickets.map((ticket) => ticket.event)} />
     </div>
   )

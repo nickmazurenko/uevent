@@ -1,5 +1,5 @@
 import Layout from '@/components/Layout'
-import UserCard from '@/components/UserCard'
+import UserCard from '@/components/profile/UserCard'
 import { User } from '@prisma/client'
 import { GetServerSidePropsContext } from 'next'
 import { getServerSession } from 'next-auth'
@@ -8,7 +8,6 @@ import { getUserByEmail } from '@/lib/users'
 import Menu from '@/components/profile/Menu'
 
 function Profile({ user }: { user: User }) {
-  console.log(user)
   return (
     <Layout>
       <div className="relative w-full h-full pt-44 md:mr-3">

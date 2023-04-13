@@ -74,7 +74,11 @@ export default class OrganizationService {
         ownerId: user?.id,
       },
       include: {
-        events: true,
+        events: {
+          include: {
+            purchasedTickets: true,
+          },
+        },
         owner: {
           select: {
             image: true,

@@ -1,7 +1,7 @@
-import { Event } from "@prisma/client";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { Event } from '@prisma/client'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import {
   ImLocation,
@@ -9,20 +9,21 @@ import {
   ImUsers,
   ImTicket,
   ImCoinDollar,
-} from "react-icons/im";
+} from 'react-icons/im'
 
-import { BiHeart, BiSortDown, BiSortUp } from "react-icons/bi";
-import moment from "moment";
-import Link from "next/link";
-import { Dropdown } from "flowbite-react";
+import { BiHeart, BiSortDown, BiSortUp } from 'react-icons/bi'
+import moment from 'moment'
+import Link from 'next/link'
+import { Dropdown } from 'flowbite-react'
 
 type Props = {
-  className?: string;
-  events: Event[];
-};
+  className?: string
+  events: Event[]
+  removeMenu?: boolean
+}
 
 function EventCard({ event }: { event: Event }) {
-  const [hovered, setHovered] = useState(false);
+  const [hovered, setHovered] = useState(false)
 
   return (
     <div
@@ -65,18 +66,18 @@ function EventCard({ event }: { event: Event }) {
           >
             <span className="p-5 text-center left-5 w-full md:w-1/3">
               {`${event.name}${
-                event.location.type === "offline"
-                  ? ", " + event.location.place.city
-                  : ""
+                event.location.type === 'offline'
+                  ? ', ' + event.location.place.city
+                  : ''
               }`}
             </span>
             <div className="flex flex-col w-full md:w-2/3 gap-8 z-30 text-base align-bottom p-5">
               <div className="flex flex-row w-full justify-between">
                 <span className="flex gap-5 items-center justify-center">
                   <ImLocation size={20} />
-                  {event.location.type === "offline"
+                  {event.location.type === 'offline'
                     ? `${event.location.place.country}, ${event.location.place.city}`
-                    : "Online"}
+                    : 'Online'}
                 </span>
                 <div className="p-2 rounded-full max-h-9 bg-ueventBg bg-opacity-30">
                   <BiHeart size={20} />
@@ -85,10 +86,10 @@ function EventCard({ event }: { event: Event }) {
               <div className="flex flex-row w-full justify-between">
                 <span className="flex gap-5 items-center justify-center">
                   <ImCalendar size={20} />
-                  {moment(event.start_at).format("MMMM Do")}
+                  {moment(event.start_at).format('MMMM Do')}
                 </span>
                 <div className="flex flex-row gap-5 px-1">
-                  {event.attendees.length}
+                  {event.purchasedTickets.length}
                   <ImUsers size={25} />
                 </div>
               </div>
@@ -113,143 +114,147 @@ function EventCard({ event }: { event: Event }) {
         )}
       </AnimatePresence>
     </div>
-  );
+  )
 }
 
 export const enum SortOptions {
-  price = "Price",
-  ticketNumber = "Number of Tickets",
-  peopleNumber = "Number of People",
-  date = "Date",
+  price = 'Price',
+  ticketNumber = 'Number of Tickets',
+  peopleNumber = 'Number of People',
+  date = 'Date',
 }
 
 export type Sort = {
-  option: SortOptions;
-  asc: boolean;
-};
+  option: SortOptions
+  asc: boolean
+}
 
 const sortByDate = (events: Event[], asc: boolean): Event[] => {
   return asc
     ? events.sort(
         (first: Event, second: Event) =>
-          new Date(second.start_at) - new Date(first.start_at)
+          new Date(second.start_at) - new Date(first.start_at),
       )
     : events.sort(
         (first: Event, second: Event) =>
-          new Date(first.start_at) - new Date(second.start_at)
-      );
-};
+          new Date(first.start_at) - new Date(second.start_at),
+      )
+}
 
 const sortEvents = (events: Event[], sort: Sort) => {
   switch (sort.option) {
     case SortOptions.date:
-      return sortByDate(events, sort.asc);
+      return sortByDate(events, sort.asc)
     case SortOptions.price:
       return events.sort((a: Event, b: Event) =>
-        sort.asc ? a.cost.amount - b.cost.amount : b.cost.amount - a.cost.amount
-      );
-      break;
+        sort.asc
+          ? a.cost.amount - b.cost.amount
+          : b.cost.amount - a.cost.amount,
+      )
+      break
     case SortOptions.peopleNumber:
       // add code to sort by number of people
-      break;
+      break
     case SortOptions.ticketNumber:
       return events.sort((a: Event, b: Event) =>
-        sort.asc ? a.tickets - b.tickets : b.tickets - a.tickets
-      );
-      break;
+        sort.asc ? a.tickets - b.tickets : b.tickets - a.tickets,
+      )
+      break
     default:
-      return events;
+      return events
   }
-};
+}
 
 export default function EventsList(props: Props) {
-  const [sortedEvents, setSortedEvents] = useState(props.events);
+  const [sortedEvents, setSortedEvents] = useState(props.events)
 
-  const [sort, setSort] = useState<Sort | null>(null);
-  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState<Sort | null>(null)
+  const [search, setSearch] = useState('')
 
   const onSortClick = (option: SortOptions) => {
     if (option === sort?.option) {
-      setSort({ ...sort, asc: !sort.asc }); // update asc based on the current value
-      setSortedEvents(sortEvents(props.events, { ...sort, asc: !sort.asc })); // update sortedEvents state
+      setSort({ ...sort, asc: !sort.asc }) // update asc based on the current value
+      setSortedEvents(sortEvents(props.events, { ...sort, asc: !sort.asc })) // update sortedEvents state
     } else {
-      setSort({ option, asc: false }); // always set asc to true when changing the option
-      setSortedEvents(sortEvents(props.events, { option, asc: false })); // update sortedEvents state
+      setSort({ option, asc: false }) // always set asc to true when changing the option
+      setSortedEvents(sortEvents(props.events, { option, asc: false })) // update sortedEvents state
     }
-  };
+  }
 
   useEffect(() => {
     if (search.length) {
       setSortedEvents((prevSortedEvents) =>
-        prevSortedEvents.filter((event) => event.name.includes(search))
-      );
+        prevSortedEvents.filter((event) => event.name.includes(search)),
+      )
     } else {
-      setSortedEvents(props.events);
+      setSortedEvents(props.events)
     }
-  }, [props.events, search]);
+  }, [props.events, search])
 
   return (
     <div className={`flex flex-col p-5 gap-10 h-full ${props.className}`}>
-      <div className="flex flex-col gap-5 md:flex-row md:justify-between justify-center items-center w-full">
-        <span className="text-2xl text-ueventText text-left font-bold w-full md:w-1/3">
-          Choose an event to find more like-minded people
-        </span>
-        <div className="flex flex-row gap-5 w-full md:w-2/3">
-          <input
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
-            className="bg-ueventBg border-b-2 w-2/3 border-ueventContrast text-ueventText"
-            placeholder="Search for events..."
-          />
-          <Dropdown
-            arrowIcon={false}
-            inline={true}
-            label={
-              <div className="flex flex-row cursor-pointer  w-full min-w-[10vw] justify-between  items-center text-ueventContrast  hover:text-ueventText">
-                <span>{sort ? sort.option : "Sort by"}</span>
-                {sort && sort.asc ? (
-                  <BiSortDown size={30} />
-                ) : (
-                  <BiSortUp size={30} />
-                )}
-              </div>
-            }
-          >
-            <Dropdown.Item
-              onClick={() => onSortClick(SortOptions.date)}
-              className="min-w-[90vw] md:min-w-[20vw] flex flex-row justify-between"
+      {props.removeMenu ? null : (
+        <div className="flex flex-col gap-5 md:flex-row md:justify-between justify-center items-center w-full">
+          <span className="text-2xl text-ueventText text-left font-bold w-full md:w-1/3">
+            Choose an event to find more like-minded people
+          </span>
+          <div className="flex flex-row gap-5 w-full md:w-2/3">
+            <input
+              onChange={(e) => {
+                setSearch(e.target.value)
+              }}
+              className="bg-ueventBg border-b-2 w-2/3 border-ueventContrast text-ueventText"
+              placeholder="Search for events..."
+            />
+            <Dropdown
+              arrowIcon={false}
+              inline={true}
+              label={
+                <div className="flex flex-row cursor-pointer  w-full min-w-[10vw] justify-between  items-center text-ueventContrast  hover:text-ueventText">
+                  <span>{sort ? sort.option : 'Sort by'}</span>
+                  {sort && sort.asc ? (
+                    <BiSortDown size={30} />
+                  ) : (
+                    <BiSortUp size={30} />
+                  )}
+                </div>
+              }
             >
-              <span>Date</span>
-              <BiSortUp size={20} />
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => onSortClick(SortOptions.price)}
-              className="min-w-[90vw] md:min-w-[20vw] flex flex-row justify-between"
-            >
-              <span>Price</span>
-              <BiSortUp size={20} />
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => onSortClick(SortOptions.peopleNumber)}
-              className="min-w-[90vw] md:min-w-[20vw] flex flex-row justify-between"
-            >
-              <span>Number of People</span>
-              <BiSortUp size={20} />
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => onSortClick(SortOptions.ticketNumber)}
-              className="min-w-[90vw] md:min-w-[20vw] flex flex-row justify-between"
-            >
-              <span>Number of Tickets</span>
-              <BiSortUp size={20} />
-            </Dropdown.Item>
-          </Dropdown>
+              <Dropdown.Item
+                onClick={() => onSortClick(SortOptions.date)}
+                className="min-w-[90vw] md:min-w-[20vw] flex flex-row justify-between"
+              >
+                <span>Date</span>
+                <BiSortUp size={20} />
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => onSortClick(SortOptions.price)}
+                className="min-w-[90vw] md:min-w-[20vw] flex flex-row justify-between"
+              >
+                <span>Price</span>
+                <BiSortUp size={20} />
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => onSortClick(SortOptions.peopleNumber)}
+                className="min-w-[90vw] md:min-w-[20vw] flex flex-row justify-between"
+              >
+                <span>Number of People</span>
+                <BiSortUp size={20} />
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => onSortClick(SortOptions.ticketNumber)}
+                className="min-w-[90vw] md:min-w-[20vw] flex flex-row justify-between"
+              >
+                <span>Number of Tickets</span>
+                <BiSortUp size={20} />
+              </Dropdown.Item>
+            </Dropdown>
+          </div>
         </div>
-      </div>
+      )}
       {sortedEvents.map((event, key) => (
         <EventCard key={key} event={event} />
       ))}
     </div>
-  );
+  )
 }

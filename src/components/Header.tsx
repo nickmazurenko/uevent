@@ -138,7 +138,9 @@ function ProfileMenu({ user }: { user: User }) {
         <span className="block text-sm">{user.name}</span>
         <span className="block truncate text-sm font-medium">{user.email}</span>
       </Dropdown.Header>
-      <Dropdown.Item>Profile</Dropdown.Item>
+      <Link href={"/profile"}>
+        <Dropdown.Item>Profile</Dropdown.Item>
+      </Link>
       <Dropdown.Item>Settings</Dropdown.Item>
       <Dropdown.Item>Organization</Dropdown.Item>
       <Dropdown.Divider />

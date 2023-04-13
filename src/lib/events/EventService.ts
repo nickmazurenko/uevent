@@ -98,7 +98,7 @@ export default class EventService {
     const events = await prisma.event.findMany({
       take: quantity,
       where,
-      include: { attendees: true },
+      include: { purchasedTickets: true },
       orderBy: { [sortBy]: sortOrder },
     });
 

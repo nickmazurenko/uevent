@@ -74,7 +74,7 @@ export default function EventCard({ event }: { event: Event }) {
                   {moment(event.start_at).format("MMMM Do")}
                 </span>
                 <div className="flex flex-row gap-5 px-1">
-                  {event.attendees.length}
+                  {event.purchasedTickets.length}
                   <ImUsers size={25} />
                 </div>
               </div>

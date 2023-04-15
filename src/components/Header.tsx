@@ -144,8 +144,13 @@ function ProfileMenu({ user }: { user: User }) {
       <Link href={"/profile/favorites"}>
         <Dropdown.Item>Favorites</Dropdown.Item>
       </Link>
+      <Link href={"/events/create"}>
+        <Dropdown.Item>Create Event</Dropdown.Item>
+      </Link>
       <Dropdown.Item>Settings</Dropdown.Item>
+      <Link href={"/profile/organization"}>
       <Dropdown.Item>Organization</Dropdown.Item>
+      </Link>
       <Dropdown.Divider />
       <Dropdown.Item onClick={() => signOut()}>Sign out</Dropdown.Item>
     </Dropdown>

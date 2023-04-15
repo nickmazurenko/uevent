@@ -1,8 +1,5 @@
 import React from 'react'
 import Image from 'next/image'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 import { User } from '@prisma/client'
 import EventsList from '@/components/eventspage/EventsList';
 import moment from 'moment'
@@ -12,6 +9,8 @@ type Props = {
 }
 
 export default function UserCard({ user }: Props) {
+  // @ts-ignore
+  const latestEvents = user?.tickets.map((ticket) => ticket.event);
   return (
     <div
       style={{ boxShadow: '0px 10px 16px 3px black' }}
@@ -35,8 +34,7 @@ export default function UserCard({ user }: Props) {
         <button className="p-2 text-ueventContrast w-full md:w-1/4">Connect Chronos</button>
       </div>
       <span className="text-xl text-ueventText">Latest Events</span>
-      {/* @ts-ignore */}
-      <EventsList className='w-full' removeMenu={true} events={user?.tickets.map((ticket) => ticket.event)} />
+      <EventsList className='w-full' removeMenu={true} events={latestEvents.slice(0, 3)} />
     </div>
   )
 }

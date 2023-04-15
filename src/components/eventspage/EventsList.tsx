@@ -109,7 +109,7 @@ export default function EventsList(props: Props) {
               onChange={(e) => {
                 setSearch(e.target.value);
               }}
-              className="bg-ueventBg border-b-2 w-2/3 border-ueventContrast text-ueventText"
+              className="bg-transparent border-b-2 w-2/3 border-ueventContrast text-ueventText"
               placeholder="Event name or city..."
             />
             <Dropdown

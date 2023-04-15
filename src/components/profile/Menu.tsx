@@ -33,7 +33,7 @@ export default function Menu() {
       >
         Tickets
       </Link>
-      <Link className={getClassName(MenuOptions.events)} href="/profile/Events">
+      <Link className={getClassName(MenuOptions.events)} href="/profile/events">
         Events
       </Link>
     </div>

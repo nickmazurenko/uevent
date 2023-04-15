@@ -1,8 +1,9 @@
-import { Event } from "@prisma/client";
 import { AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { Spinner } from "flowbite-react";
 import {
   ImLocation,
   ImCalendar,
@@ -13,9 +14,45 @@ import {
 import { BiHeart } from "react-icons/bi";
 import moment from "moment";
 import Link from "next/link";
+import { Event } from "@/components/eventspage/EventCard";
+import { useSession } from "next-auth/react";
 
 export default function EventCard({ event }: { event: Event }) {
   const [hovered, setHovered] = useState(false);
+  const { data: session, status } = useSession();
+  const [loading, setLoading] = useState(status === "loading");
+  const [inFavorites, setInFavorites] = useState(
+    event?.favoritedBy &&
+      event?.favoritedBy.some(
+        (item) => item.user.email === session?.user?.email
+      )
+  );
+
+  useEffect(() => {
+    setLoading(status === "loading");
+  }, [status]);
+
+  const onAddToFavorites = async (event: Event) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/events/${event.id}/addToFavorites`, {
+        method: "POST",
+      });
+      if (response.ok) {
+        const message = await response.json();
+        setInFavorites(!inFavorites);
+        console.log(message);
+      } else {
+        const message = await response.json();
+        console.error(response.status, response.statusText, message);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <div
@@ -35,7 +72,7 @@ export default function EventCard({ event }: { event: Event }) {
       <div className="absolute bottom-0 z-20 h-1/6 backdrop-blur-xl w-full text-ueventText text-xl text-center items-center justify-center flex">
         {`${event.name}${
           event.location.type === "offline"
-            ? `, ${event.location.place.city}`
+            ? `, ${event.location.place?.city}`
             : ""
         }`}
       </div>
@@ -52,7 +89,7 @@ export default function EventCard({ event }: { event: Event }) {
             <span className="p-5 absolute top-5">
               {`${event.name} ${
                 event.location.type === "offline"
-                  ? event.location.place.city
+                  ? event.location.place?.city
                   : ""
               }`}
             </span>
@@ -61,11 +98,24 @@ export default function EventCard({ event }: { event: Event }) {
                 <span className="flex gap-5 items-center justify-center">
                   <ImLocation size={20} />
                   {event.location.type === "offline"
-                    ? `${event.location.place.country}, ${event.location.place.city}`
+                    ? `${event.location.place?.country}, ${event.location.place?.city}`
                     : "Online"}
                 </span>
-                <div className="p-2 rounded-full max-h-9 bg-ueventBg bg-opacity-30">
-                  <BiHeart size={20} />
+                <div
+                  onClick={() => onAddToFavorites(event)}
+                  className="p-2 rounded-full max-h-9 bg-ueventBg hover:bg-ueventContrast hover:bg-opacity-100 bg-opacity-30"
+                >
+                  {loading ? (
+                    <Spinner size="md" />
+                  ) : (
+                    <>
+                      {inFavorites ? (
+                        <AiFillHeart className="text-red-800" size={20} />
+                      ) : (
+                        <AiOutlineHeart size={20} />
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
               <div className="flex flex-row w-full justify-between">

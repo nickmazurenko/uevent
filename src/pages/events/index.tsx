@@ -1,13 +1,10 @@
 import Layout from "@/components/Layout";
 import { Event } from "@prisma/client";
 import { GetServerSidePropsContext } from "next";
-import { getServerSession } from "next-auth/next";
-import CreateEvent from "@/components/Events/CreateEvent";
 import EventService from "@/lib/events/EventService";
 import EventsDescription from "@/components/eventspage/EventsDescription";
 import TagList from "@/components/eventspage/TagList";
 import { useEffect, useState } from "react";
-import EventList from "@/components/homepage/EventList";
 import EventsList from "@/components/eventspage/EventsList";
 import ContactUs from "@/components/eventspage/ContactUs";
 

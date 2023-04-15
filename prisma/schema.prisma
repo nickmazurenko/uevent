@@ -51,6 +51,7 @@ model User {
   sessions      Session[]
   Organization  Organization[]
   events        EventAttendee[]
+  favorites        FavoriteEvent[]
   tickets       Ticket[]        @relation("UserTickets")
 
   @@map(name: "users")
@@ -96,6 +97,7 @@ model Event {
   organizationId   String?          @db.ObjectId
   organization     Organization?   @relation("OrganizationEvents", fields: [organizationId], references: [id], onDelete: SetNull)
   attendees        EventAttendee[]
+  favoritedBy        FavoriteEvent[]
   purchasedTickets Ticket[]        @relation("PurchasedTickets")
   payments         Payment[]       @relation("Payments")
 
@@ -110,6 +112,15 @@ model EventAttendee {
   user    User   @relation(fields: [userId], references: [id])
 
   @@map(name: "event_attendee")
+}
+model FavoriteEvent {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  eventId String @db.ObjectId
+  event   Event  @relation(fields: [eventId], references: [id])
+  userId  String @db.ObjectId
+  user    User   @relation(fields: [userId], references: [id])
+
+  @@map(name: "favorite_event")
 }
 
 type Cost {

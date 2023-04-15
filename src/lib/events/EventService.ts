@@ -98,7 +98,18 @@ export default class EventService {
     const events = await prisma.event.findMany({
       take: quantity,
       where,
-      include: { purchasedTickets: true },
+      include: {
+        purchasedTickets: true,
+        favoritedBy: {
+          select: {
+            user: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
+      },
       orderBy: { [sortBy]: sortOrder },
     });
 
@@ -114,7 +125,18 @@ export default class EventService {
   static async retrieveOne(eventId: string, includeTickets?: boolean) {
     const event = await prisma.event.findFirst({
       where: { id: eventId },
-      include: { purchasedTickets: includeTickets },
+      include: {
+        purchasedTickets: includeTickets,
+        favoritedBy: {
+          select: {
+            user: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     return {
@@ -155,5 +177,16 @@ export default class EventService {
     const tags = [...new Set(events.flatMap((event) => event.tags))];
 
     return tags;
+  }
+
+  static async addToFavorites(eventId: string, userId: string) {
+    await prisma.favoriteEvent.create({
+      data: { eventId, userId },
+    });
+  }
+  static async removeFromFavorites(eventId: string, userId: string) {
+    await prisma.favoriteEvent.deleteMany({
+      where: { eventId, userId },
+    });
   }
 }

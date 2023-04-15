@@ -141,6 +141,9 @@ function ProfileMenu({ user }: { user: User }) {
       <Link href={"/profile"}>
         <Dropdown.Item>Profile</Dropdown.Item>
       </Link>
+      <Link href={"/profile/favorites"}>
+        <Dropdown.Item>Favorites</Dropdown.Item>
+      </Link>
       <Dropdown.Item>Settings</Dropdown.Item>
       <Dropdown.Item>Organization</Dropdown.Item>
       <Dropdown.Divider />

@@ -1,11 +1,11 @@
-import Layout from '@/components/Layout'
-import UserCard from '@/components/profile/UserCard'
-import { User } from '@prisma/client'
-import { GetServerSidePropsContext } from 'next'
-import { getServerSession } from 'next-auth'
-import { options } from '../api/auth/[...nextauth]'
-import { getUserByEmail } from '@/lib/users'
-import Menu from '@/components/profile/Menu'
+import Layout from "@/components/Layout";
+import UserCard from "@/components/profile/UserCard";
+import { User } from "@prisma/client";
+import { GetServerSidePropsContext } from "next";
+import { getServerSession } from "next-auth";
+import { options } from "../api/auth/[...nextauth]";
+import { getUserByEmail } from "@/lib/users";
+import Menu from "@/components/profile/Menu";
 
 function Profile({ user }: { user: User }) {
   return (
@@ -17,26 +17,26 @@ function Profile({ user }: { user: User }) {
         </div>
       </div>
     </Layout>
-  )
+  );
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, options)
+  const session = await getServerSession(context.req, context.res, options);
 
   if (!session || !session.user) {
     return {
       redirect: {
         permanent: false,
-        destination: '/',
+        destination: "/",
       },
       props: {},
-    }
+    };
   }
 
   // @ts-ignore
-  const user = await getUserByEmail(session.user.email)
+  const user = await getUserByEmail(session.user.email);
 
-  return { props: { user } }
+  return { props: { user } };
 }
 
-export default Profile
+export default Profile;

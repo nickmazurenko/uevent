@@ -77,6 +77,15 @@ export default class OrganizationService {
         events: {
           include: {
             purchasedTickets: true,
+            favoritedBy: {
+              select: {
+                user: {
+                  select: {
+                    email: true,
+                  },
+                },
+              },
+            },
           },
         },
         owner: {

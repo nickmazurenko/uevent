@@ -40,11 +40,11 @@ export default function LocationTypeInput({
   }, [location, isOnline]);
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-4 text-ueventText w-full">
       <span>Please select event type</span>
       <fieldset className="flex flex-col gap-4" id="radio">
         <div className="flex flex-col gap-2">
-          <div className="flex gap-2 text-black z-10">
+          <div className="flex gap-2 z-10">
             <Radio
               onClick={() => handleSelect("online")}
               name="type"
@@ -62,13 +62,13 @@ export default function LocationTypeInput({
                 animate={{ opacity: 1, y: "0" }}
                 exit={{ opacity: 0, y: "-100%" }}
               >
-                <TextInput
+                <input
                   placeholder="Meeting link or invite link"
                   value={location.link}
                   onChange={(e) => {
                     setLocation({ ...location, link: e.target.value });
                   }}
-                  className="w-full"
+                  className="w-full p-2 bg-transparent border-0 border-b-2 border-ueventContrast"
                   id="link"
                   required={true}
                 />

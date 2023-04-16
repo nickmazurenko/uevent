@@ -36,6 +36,7 @@ export const getUserByEmail = async (
       },
     },
   });
+
   return {
     ...user,
     createdAt: user?.createdAt.toISOString(),

@@ -17,9 +17,9 @@ export default function EventTicketAndCostInput({
       <div className="flex flex-col items-center w-full mb-6">
         <label
           htmlFor="tickets"
-          className="block mb-2 text-sm font-medium text-gray-900"
+          className="block mb-2 text-sm font-medium text-ueventText"
         >
-          Tickets
+          Number of Tickets
         </label>
         <input
           id="tickets"
@@ -27,31 +27,36 @@ export default function EventTicketAndCostInput({
           value={tickets}
           min="1"
           onChange={onChange}
-          className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="p-2 text-ueventText border-0 border-b-2 border-ueventContrast bg-transparent w-full text-center"
         />
       </div>
       <div className="flex flex-col items-center w-full mb-6 relative">
         <label
           htmlFor="cost"
-          className="block mb-2 text-sm font-medium text-gray-900"
+          className="block mb-2 text-sm font-medium text-ueventText"
         >
           Cost
         </label>
         <div className="flex flex-row">
-        <input
-          id="cost"
-          value={cost.amount}
-          onChange={onChange}
-          className="text-center rounded-r-none w-full text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          type="number"
-          step="0.01"
-          min="0"
-        />
-        <select id="cost" value={cost.currency} onChange={onChange} className="text-sm rounded-lg rounded-l-none border-none block p-2.5 bg-gray-700 placeholder-gray-400 text-white">
-          <option>USD</option>
-          <option>EUR</option>
-          <option>UAH</option>
-        </select>
+          <input
+            id="cost"
+            value={cost.amount}
+            onChange={onChange}
+            className="p-2 text-ueventText border-0 border-b-2 border-ueventContrast bg-transparent w-full text-center"
+            type="number"
+            step="0.01"
+            min="0"
+          />
+          <select
+            id="cost"
+            value={cost.currency}
+            onChange={onChange}
+            className="text-sm rounded-lg rounded-l-none border-none block p-2.5 bg-ueventContrast placeholder-ueventText text-ueventText appearance-none bg-transparent pl-4 pr-8"
+          >
+            <option className="p-2">USD</option>
+            <option className="p-2">EUR</option>
+            <option className="p-2">UAH</option>
+          </select>
         </div>
       </div>
     </div>

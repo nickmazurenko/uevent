@@ -1,4 +1,5 @@
 import { Organization, User } from "@prisma/client";
+import { getUserByEmail } from "../users";
 
 export interface ICloudinaryImage {
   url: string;
@@ -68,6 +69,9 @@ export default class OrganizationService {
 
   static async getUserOrganization(user: User | null) {
     if (!user) return null;
+    if (!user.id) {
+      user.id = (await getUserByEmail(user.email as string)).id;
+    }
 
     const organization = await prisma.organization.findFirst({
       where: {

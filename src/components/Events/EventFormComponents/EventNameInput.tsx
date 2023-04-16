@@ -9,7 +9,7 @@ export default function EventNameInput({value, onChange}: Props) {
     <div className="flex flex-col items-center w-full mb-6">
       <label
         htmlFor="name"
-        className="block mb-2 text-sm font-medium text-gray-900"
+        className="block mb-2 text-sm font-medium text-ueventText"
       >
         Name
       </label>
@@ -17,8 +17,9 @@ export default function EventNameInput({value, onChange}: Props) {
         type="text"
         id="name"
         value={value}
+        placeholder="e.g. Charity 5K Run"
         onChange={onChange}
-        className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        className="p-2 bg-transparent border-0 w-full text-center border-b-2 border-ueventContrast text-ueventText "
       />
     </div>
   );

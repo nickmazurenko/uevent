@@ -138,6 +138,20 @@ export default class OrganizationService {
     });
   }
 
+  static async retrieveAllNews() {
+    const news = await prisma.news.findMany({
+      include: {
+        organization: true,
+      },
+      orderBy: { createdAt: "asc" },
+    });
+
+    return news.map((item) => ({
+      ...item,
+      createdAt: item.createdAt.toISOString(),
+    }));
+  }
+
   static async retrieveOne(id: string) {
     const organization = await prisma.organization.findUnique({
       where: {

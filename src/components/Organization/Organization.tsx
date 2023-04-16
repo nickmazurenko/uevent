@@ -69,13 +69,15 @@ export default function Organization({ organization }: Props) {
           <div className="text-ueventText flex flex-col w-full p-5 md:flex-row gap-5 justify-center items-start md:justify-between">
             <div className="flex flex-row gap-8 items-center justify-center w-full">
               <div className="flex flex-row gap-5 items-center">
-                <Image
-                  src={organization.image as string}
-                  className="rounded-full"
-                  width="120"
-                  height="120"
-                  alt="avatar"
-                />
+                {organization.image && (
+                  <Image
+                    src={organization?.image as string}
+                    className="rounded-full"
+                    width="120"
+                    height="120"
+                    alt="avatar"
+                  />
+                )}
                 <div className="flex flex-col w-full gap-2">
                   <span className="text-2xl">{organization?.name}</span>
                   <span className="text-xs text-gray-500">

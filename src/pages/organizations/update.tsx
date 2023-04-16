@@ -41,7 +41,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         return {
             redirect: {
               permanent: false,
-              destination: "/organizations",
+              destination: "/profile/organization",
             },
             props: {},
           };

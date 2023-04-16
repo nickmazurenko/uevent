@@ -39,10 +39,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   const organization = await OrganizationService.getUserOrganization(
-      // @ts-ignore
+    // @ts-ignore
     session.user
   );
-    console.log(organization);
   return { props: { organization } };
 }
 

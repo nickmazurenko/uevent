@@ -106,13 +106,14 @@ export default class OrganizationService {
         created_at: event.created_at.toISOString(),
       }));
 
-    return {
-      ...organization,
-      news: organization?.news.map((news) => ({
+    if (organization?.news)
+      // @ts-ignore
+      organization.news = organization?.news?.map((news) => ({
         ...news,
         createdAt: news.createdAt.toISOString(),
-      })),
-    };
+      }));
+
+    return organization;
   }
 
   static async createNews({

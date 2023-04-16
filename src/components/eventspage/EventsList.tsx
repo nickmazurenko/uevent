@@ -158,7 +158,7 @@ export default function EventsList(props: Props) {
           </div>
         </div>
       )}
-      {sortedEvents.map((event, key) => (
+      {sortedEvents?.map((event, key) => (
         <EventCard key={key} event={event} />
       ))}
     </div>

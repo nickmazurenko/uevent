@@ -45,9 +45,10 @@ export default function OrganizationForm(props: Props) {
           type="text"
           id="name"
           value={props.organizationData.name}
+          placeholder="Organization name..."
           onChange={props.onDataChange}
-          className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        />
+          className="w-full p-2 bg-transparent border-0 border-b-2 text-ueventText border-ueventContrast"
+/>
       </div>
 
       <div className="flex flex-col items-center w-full mb-6">
@@ -61,8 +62,9 @@ export default function OrganizationForm(props: Props) {
           id="description"
           value={props.organizationData.description}
           onChange={props.onDataChange}
+          placeholder="Organization description..."
           rows={4}
-          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="w-full p-2 border-0 bg-transparent text-ueventText border-b-2 border-ueventContrast"
         ></textarea>
       </div>
 
@@ -75,8 +77,8 @@ export default function OrganizationForm(props: Props) {
       <Button
         text={
           props.formType == "create"
-            ? "Register new organization"
-            : "Update organization"
+            ? "Create"
+            : "Update"
         }
         type="submit"
         isLoading={props.loading}

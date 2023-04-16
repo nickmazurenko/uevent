@@ -42,7 +42,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       // @ts-ignore
     session.user
   );
-
+    console.log(organization);
   return { props: { organization } };
 }
 

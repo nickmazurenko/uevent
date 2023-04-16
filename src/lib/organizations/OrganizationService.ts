@@ -74,6 +74,7 @@ export default class OrganizationService {
         ownerId: user?.id,
       },
       include: {
+        news: true,
         events: {
           include: {
             purchasedTickets: true,
@@ -98,21 +99,52 @@ export default class OrganizationService {
       },
     });
     if (organization?.events)
+      // @ts-ignore
       organization.events = organization?.events.map((event) => ({
         ...event,
         start_at: event.start_at.toISOString(),
         created_at: event.created_at.toISOString(),
       }));
 
-    return organization;
+    return {
+      ...organization,
+      news: organization?.news.map((news) => ({
+        ...news,
+        createdAt: news.createdAt.toISOString(),
+      })),
+    };
+  }
+
+  static async createNews({
+    title,
+    plot,
+    image,
+    organizationId,
+  }: {
+    title: string;
+    plot: string;
+    image: ICloudinaryImage;
+    organizationId: string;
+  }) {
+    return await prisma.news.create({
+      data: {
+        title,
+        plot,
+        image: image.url,
+        image_id: image.public_id,
+        image_signature: image.signature,
+        organizationId: organizationId,
+      },
+    });
   }
 
   static async retrieveOne(id: string) {
-    return await prisma.organization.findUnique({
+    const organization = await prisma.organization.findUnique({
       where: {
         id,
       },
       include: {
+        news: true,
         owner: {
           select: {
             image: true,
@@ -122,5 +154,12 @@ export default class OrganizationService {
         },
       },
     });
+    return {
+      ...organization,
+      news: organization?.news.map((news) => ({
+        ...news,
+        createdAt: news.createdAt.toISOString(),
+      })),
+    };
   }
 }

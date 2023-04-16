@@ -7,6 +7,7 @@ import Image from "next/image";
 import moment from "moment";
 import EventsList from "../eventspage/EventsList";
 import CreateOrganization from "./CreateOrganization";
+import NewsList from "./NewsList";
 
 const defaultTabs: TabData[] = [
   { selected: true, text: "Events" },
@@ -47,7 +48,7 @@ export default function Organization({ organization }: Props) {
           </div>
         );
       case "News":
-        return <div></div>;
+        return <NewsList news={organization.news} />;
       case "Settings":
         return <OrganizationSettings />;
     }
@@ -88,7 +89,9 @@ export default function Organization({ organization }: Props) {
             </div>
           </div>
           <Tabs tabs={tabs} handleSelect={handleTabSelect}></Tabs>
-          <div id="organization-data-page">{selectPage()}</div>
+          <div className="w-full p-5 h-full" id="organization-data-page">
+            {selectPage()}
+          </div>
         </>
       ) : (
         <CreateOrganization />

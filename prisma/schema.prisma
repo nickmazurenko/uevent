@@ -51,7 +51,7 @@ model User {
   sessions      Session[]
   Organization  Organization[]
   events        EventAttendee[]
-  favorites        FavoriteEvent[]
+  favorites     FavoriteEvent[]
   tickets       Ticket[]        @relation("UserTickets")
 
   @@map(name: "users")
@@ -76,8 +76,23 @@ model Organization {
   image_id        String
   image_signature String
   events          Event[] @relation("OrganizationEvents")
+  news            News[]
 
   @@map(name: "organization")
+}
+
+model News {
+  id              String       @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  plot            String
+  image           String
+  image_id        String
+  image_signature String
+  createdAt       DateTime     @default(now())
+  organizationId  String?       @db.ObjectId
+  organization    Organization? @relation(fields: [organizationId], references: [id])
+
+  @@map(name: "news")
 }
 
 model Event {
@@ -88,16 +103,16 @@ model Event {
   image_ids        String[]
   image_signatures String[]
   start_at         DateTime
-  created_at       DateTime @default(now())
+  created_at       DateTime        @default(now())
   duration         Int
   cost             Cost
   tickets          Int
   location         Json
   tags             String[]
-  organizationId   String?          @db.ObjectId
+  organizationId   String?         @db.ObjectId
   organization     Organization?   @relation("OrganizationEvents", fields: [organizationId], references: [id], onDelete: SetNull)
   attendees        EventAttendee[]
-  favoritedBy        FavoriteEvent[]
+  favoritedBy      FavoriteEvent[]
   purchasedTickets Ticket[]        @relation("PurchasedTickets")
   payments         Payment[]       @relation("Payments")
 
@@ -113,6 +128,7 @@ model EventAttendee {
 
   @@map(name: "event_attendee")
 }
+
 model FavoriteEvent {
   id      String @id @default(auto()) @map("_id") @db.ObjectId
   eventId String @db.ObjectId

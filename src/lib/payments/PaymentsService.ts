@@ -1,4 +1,6 @@
 import { Event } from "@prisma/client";
+import prisma from "@/lib/prisma";
+
 
 export default class PaymentsService {
     static async getPendingPayments(eventId: string) {

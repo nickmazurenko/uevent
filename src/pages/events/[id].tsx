@@ -5,6 +5,9 @@ import { GetServerSidePropsContext } from "next";
 import { options } from "../api/auth/[...nextauth]";
 import { EventData } from "@/lib/events/EventsFrontService";
 import EventService from "@/lib/events/EventService";
+import GatherwiseDesc from "@/components/defaults/GatherwiseDesc";
+import Description from "@/components/homepage/HomeDescription";
+import EventPageHeader from "@/components/eventspage/EventPageHeader";
 
 export type Props = {
   event: EventData;
@@ -14,7 +17,12 @@ export type Props = {
 export default function EventPage({ event, eventId }: Props) {
   return (
     <Layout>
-      <Event {...{ event, eventId }} />
+      <div className="relative flex flex-col gap-20 w-full h-full">
+        <EventPageHeader />
+        <div className="flex flex-wrap w-full h-full justify-between">
+          <Event {...{ event, eventId }} />
+        </div>
+      </div>
     </Layout>
   );
 }

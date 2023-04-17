@@ -3,6 +3,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import nc from "next-connect";
 import OrganizationService from "@/lib/organizations/OrganizationService";
+import prisma from "@/lib/prisma";
+
 
 const handler = nc({
   onError: (err, req, res: NextApiResponse, next) => {

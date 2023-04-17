@@ -1,39 +1,77 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Gatherwise
 
-## Getting Started
+[![Version](https://img.shields.io/static/v1?label=version&message=1.0.0&color=blue)](https://shields.io/)
+[![NPM](https://img.shields.io/static/v1?label=npm&message=8.11.0&color=blue)](https://shields.io/)
+[![NODE](https://img.shields.io/static/v1?label=node&message=18.12.1&color=success)](https://shields.io/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://shields.io/)
 
-First, run the development server:
+### [🌐 Website](https://deleashers-chronos.netlify.app/)  |  [📹 Demo Video](https://www.youtube.com/watch?v=qUWUdwBCEuE)
 
-```bash
+### App Hosted On
+- __[gatherwise](https://chronos-server.onrender.com/) (Primary)__
+
+
+Gatherwise is an event shop that allows users to create organizations, search for events, buy tickets, and write news. This project is built using Tailwind CSS, React, and Next.js.
+
+## My Tech Stack
+
+#### Front-end
+
+- Front-end Framework: `React.js `
+- Styling: `Tailwind CSS`
+
+#### Back-end
+
+- For handling index requests: `Next.js`
+- As Database: `MongoDb - mongoose Prisma ORM`
+- API tested using: `POSTMAN`
+
+## Installation
+
+To run the project locally, follow these steps:
+
+1. Clone the repository: `git clone https://github.com/deleashers/gatherwise.git`
+2. Navigate to the project directory: `cd gatherwise`
+3. Install dependencies: `npm install`
+
+## Usage
+
+To start the development server, run the following command:
+
+```
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This will start the server at http://localhost:3000.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Features
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- User authentication and authorization
+- Pages localization (en/uk)
+- Organization creation and management
+- Event search and filtering
+- Ticket purchasing and management
+- Custom Ticket Building
+- News article creation and management
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Contributing
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+We welcome contributions to the Gatherwise project! To contribute, follow these steps:
 
-## Learn More
+1. Fork the repository
+2. Create a new branch: `git checkout -b my-new-feature`
+3. Make changes and commit them: `git commit -m "Add my new feature"`
+4. Push to the branch: `git push origin my-new-feature`
+5. Create a pull request
 
-To learn more about Next.js, take a look at the following resources:
+Please ensure that your code follows our coding standards and includes appropriate tests.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Credits
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- [Tailwind CSS](https://tailwindcss.com/)
+- [React](https://reactjs.org/)
+- [Next.js](https://nextjs.org/)
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# uevent
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).

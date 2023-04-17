@@ -1,5 +1,7 @@
 import { ChronosService } from "../chronos";
 import EventService from "../events/EventService";
+import prisma from "@/lib/prisma";
+
 
 export default class TicketService {
     static async createTicket(eventId: string, buyerId: string) {

@@ -23,7 +23,14 @@ export default function Organization({ organization }: Props) {
   const { data: session } = useSession();
   const user = session?.user;
 
-  const [tabs, setTabs] = useState(defaultTabs);
+  const [tabs, setTabs] = useState(
+    organization.owner.email === session?.user?.email
+      ? defaultTabs
+      : [
+          { selected: true, text: "Events" },
+          { selected: false, text: "News" },
+        ]
+  );
 
   const handleTabSelect: MouseEventHandler<HTMLSpanElement> = (e) => {
     const clickedId = e.target.id;
@@ -48,7 +55,12 @@ export default function Organization({ organization }: Props) {
           </div>
         );
       case "News":
-        return <NewsList news={organization.news} />;
+        return (
+          <NewsList
+            isOwner={organization.owner.email === session?.user?.email}
+            news={organization.news}
+          />
+        );
       case "Settings":
         return <OrganizationSettings />;
     }

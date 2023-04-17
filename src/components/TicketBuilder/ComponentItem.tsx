@@ -1,4 +1,4 @@
-import RenderComponent from "./CanvasRenderer/RenderComponent"
+import {RenderComponent} from "./CanvasRenderer/RenderComponent"
 
 export type Props = {
     renderComponent: RenderComponent
@@ -6,6 +6,6 @@ export type Props = {
 
 export default function ComponentItem( { renderComponent }: Props ) {
 
-    if (renderComponent instanceof Ima)
-
+    if (renderComponent instanceof Image)
+return (<></>);
 }

@@ -1,5 +1,6 @@
 import { Organization, User } from "@prisma/client";
 import { getUserByEmail } from "../users";
+import prisma from "@/lib/prisma";
 
 export interface ICloudinaryImage {
   url: string;

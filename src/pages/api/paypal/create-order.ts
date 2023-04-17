@@ -1,4 +1,4 @@
-import prisma from "prisma/prisma";
+import prisma from "@/lib/prisma";
 import type { NextApiResponse, NextApiRequest } from "next";
 import client, { calcValueWithPaypalFee } from "@/lib/payments/paypal";
 import paypal from "@paypal/checkout-server-sdk";

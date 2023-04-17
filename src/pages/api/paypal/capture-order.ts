@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import client from "@/lib/payments/paypal";
 import paypal from "@paypal/checkout-server-sdk";
-import prisma from "prisma/prisma";
+import prisma from "@/lib/prisma";
 import { PaymentsService } from "@/lib/payments";
 import { getSession } from "next-auth/react";
 import { getUserByEmail } from "@/lib/users";

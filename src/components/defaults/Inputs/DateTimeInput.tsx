@@ -1,3 +1,5 @@
+// @ts-ignore
+// eslint-disable-next-line
 import DateTimePicker from "react-datetime-picker/dist/entry.nostyle";
 // import DateTimePicker from "react-datetime-picker";
 import "react-datetime-picker/dist/DateTimePicker.css";

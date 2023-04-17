@@ -7,12 +7,45 @@ import Menu from "@/components/profile/Menu";
 import EventsList from "@/components/eventspage/EventsList";
 import { Event } from "@/components/eventspage/EventCard";
 import { Ticket } from "@prisma/client";
+import { useEffect, useState } from "react";
 
 type Props = {
   tickets: Ticket[];
 };
 
 export default function UserEvents(props: Props) {
+
+  const tickets = props.tickets;
+  const eventIds: string[] = [];
+
+  tickets.forEach(ticket => {
+    if (eventIds.includes(ticket.eventId)) {
+      return;
+    }
+    eventIds.push(ticket.eventId);
+  })
+
+  const defaultImages = {};
+  eventIds.forEach(eventId => {
+    defaultImages[eventId] = null;
+  });
+
+  const [images, setImages] = useState(defaultImages);
+
+  useEffect(() => {
+
+    eventIds.forEach(async (eventId) => {
+      const res = await fetch(`/api/events/ticket-image/${eventId}`);
+      const imageURL = (await res.json()).img;
+      console.log("Image URL: " + imageURL);
+      setImages({
+        ...images,
+        [eventId]: imageURL
+      })
+    })
+
+  }, []);
+
   return (
     <Layout>
       <div className="relative w-full h-full pt-44 md:mr-3">
@@ -25,7 +58,14 @@ export default function UserEvents(props: Props) {
             <span className="text-2xl text-ueventText text-center">
               Your Tickets
             </span>
-            {/* <EventsList events={props.events} /> */}
+            {
+              tickets.map(ticket => {
+                return (
+                  <div key={ticket.id}>
+                    <img src={images[ticket.eventId] || ""} alt="ticekt-view" />
+                  </div>)
+              })
+            }
           </div>
         </div>
       </div>

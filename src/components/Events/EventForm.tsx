@@ -26,6 +26,7 @@ export type Props = {
   imageId: string;
   loading: boolean;
   formType: "create" | "update";
+  openTicketBuilderTab: () => void
 };
 
 function EventForm({
@@ -35,6 +36,7 @@ function EventForm({
   imageId,
   formType,
   loading,
+  openTicketBuilderTab
 }: Props) {
   const [currentStep, setCurrentStep] = useState(0);
   const router = useRouter();
@@ -54,6 +56,11 @@ function EventForm({
   function handleBack(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setCurrentStep((prev) => prev - 1);
+  }
+
+  function openTicketBuilder(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    openTicketBuilderTab();
   }
 
   const form = [
@@ -172,13 +179,12 @@ function EventForm({
             Next
           </button>
         ) : (
-          <Button
-            text={formType == "create" ? "Create new event" : "Update Event"}
-            type="submit"
-            isLoading={loading}
-            loadingComponent={<Spinner />}
-            additionalClasses="w-1/2"
-          />
+            <button
+              className="px-4 py-2 bg-ueventContrast rounded-lg text-white"
+              onClick={openTicketBuilder}
+            >
+              Next
+            </button>
         )}
       </div>
     </form>

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react"
+import { CanvasHTMLAttributes, useContext, useEffect, useRef, useState } from "react"
 import { TicketBuilderContext } from "../TicketBuilderContext";
 import { Text, Image as ImageRender } from "../CanvasRenderer";
 import Vector2 from "../CanvasRenderer/Vector2";
@@ -7,14 +7,19 @@ export default function TicketView() {
 
     const { ticketSize, renderComponentsArray, rcService } = useContext(TicketBuilderContext);
 
-    const canvasRef = useRef(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
 
+    const saveTicket = () => {
+        if (canvasRef && canvasRef.current) {
+            canvasRef.current.toDataURL("image/png", 1.0);
+        }
+    }
 
     const fillRect = () => {
         context?.clearRect(0, 0, context.canvas.width, context.canvas.width);
-        context.fillStyle = "grey";
+        context.fillStyle = "#1A1A1A";
         context?.fillRect(0, 0, context.canvas.width, context.canvas.height);
     }
 
@@ -81,11 +86,19 @@ export default function TicketView() {
 
     }, [renderComponentsArray]);
 
+    const minWidth = ` min-w-fit `;
 
     return (
-        <div className="w-[50%]" id="ticketView">
-            Ticket View
-            <canvas width={ticketSize.x} height={ticketSize.y} ref={canvasRef}></canvas>
+
+        <div className={"w-[60%] text-center"} id="ticketView">
+            <span>Ticket View</span>
+            <br></br>
+            <span className="w-fit ">
+                <canvas className="inline rounded-[32px]" width={ticketSize.x} height={ticketSize.y} ref={canvasRef}></canvas>
+            </span>
+            <div>
+                <button onClick={() => saveTicket()}>save</button>
+            </div>
         </div>
     )
 }

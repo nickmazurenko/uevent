@@ -6,6 +6,7 @@ import NumberInput from "../Inputs/NumberInput";
 import SelectInput from "../Inputs/SelectInput";
 import { TicketBuilderContext } from "../TicketBuilderContext";
 import TicketData from "../TicketData";
+import Button from "@/components/defaults/Buttons/Button";
 
 
 
@@ -44,7 +45,7 @@ const ticketForm = {
     "ticketSizeY": { type: "number", label: "TicketHeight" }
 }
 
-export default function TicketForm() {
+export default function TicketForm({ handleFormSubmit }: { handleFormSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void> }) {
 
     const { ticketItems, setTicketItems, setTicketSize, ticketSize, rcService  } = useContext(TicketBuilderContext);
 
@@ -60,11 +61,15 @@ export default function TicketForm() {
 
     useEffect(() => {
         // console.log(loadForm());
-        const { form, rooms } = loadForm();
+        const loadedForm = loadForm();
+        if (loadedForm) {
+            const { form, rooms } = loadedForm;
 
-        setForm(form);
-        setRooms(rooms || []);
-        setSaveMode(true);
+            setForm(form);
+            setRooms(rooms || []);
+            setSaveMode(true);
+        }
+
 
     }, []);
 
@@ -104,9 +109,9 @@ export default function TicketForm() {
     }
 
     return (
-        <div className="w-[25%]" id="ticketForm">
+        <div className="w-[17%]" id="ticketForm">
             Ticket params
-            <form>
+            <form onSubmit={handleFormSubmit}  >
                 {
                     ticketFormIds.map((ticketFormId, idx) => {
 
@@ -132,7 +137,9 @@ export default function TicketForm() {
                         return null;
                     })
                 }
-
+                <Button
+                    text="Create event"
+                ></Button>
             </form>
 
         </div>

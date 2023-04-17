@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import Button from "../defaults/Buttons/Button";
 import EventFrontService, {
   Currency,
@@ -6,7 +6,10 @@ import EventFrontService, {
 } from "@/lib/events/EventsFrontService";
 import EventForm from "./EventForm";
 import Event from "./Event";
-import { Tabs } from "flowbite-react";
+import { Tabs, TabsRef } from "flowbite-react";
+import TicketBuilder from "../TicketBuilder/TicketBuilder";
+import TicketBuilderContextWrapper from "../TicketBuilder/TicketBuilderContext";
+import EventDataContext, { EventDataContextWrapper } from "./EventDataContext";
 const eventImageId = "eventImages";
 
 export default function CreateEvent() {
@@ -26,6 +29,11 @@ export default function CreateEvent() {
 
   const [loading, setLoading] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
+
+  const tabsRef = useRef<TabsRef>(null);
+  const openTicketBuilderTab = () => {
+    tabsRef.current?.setActiveTab(2);
+  }
 
   const service = new EventFrontService({
     eventData,
@@ -54,9 +62,19 @@ export default function CreateEvent() {
 
   const handleFormSubmit = service.createHandleFormSubmit("create");
 
+  const eventDataContext = useContext(EventDataContext);
+
+  useEffect(() => {
+    if (eventDataContext.setEventData)
+      eventDataContext.setEventData(eventData);
+
+  }, [eventData]);
+
   return (
     <div className="flex flex-col items-center w-full gap-6">
-      <Tabs.Group className="w-full flex self-center items-center justify-center">
+      <Tabs.Group
+        className="w-full flex self-center items-center justify-center z-50"
+        ref={tabsRef}>
         <Tabs.Item title="Create Event">
           <EventForm
             onSubmit={handleFormSubmit}
@@ -66,6 +84,7 @@ export default function CreateEvent() {
             imageId={eventImageId}
             eventData={eventData}
             formType="create"
+            openTicketBuilderTab={openTicketBuilderTab}
           />
         </Tabs.Item>
         <Tabs.Item title="Preview">
@@ -74,6 +93,11 @@ export default function CreateEvent() {
             onClose={() => setOpenPreview(false)}
             event={generatePreviewEvent()}
           />
+        </Tabs.Item>
+        <Tabs.Item title="Ticket builder" className="w-full">
+          <TicketBuilderContextWrapper>
+            <TicketBuilder {...{handleFormSubmit}}></TicketBuilder>
+          </TicketBuilderContextWrapper>
         </Tabs.Item>
       </Tabs.Group>
     </div>

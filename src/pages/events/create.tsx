@@ -7,6 +7,7 @@ import { User } from "@prisma/client";
 import Layout from "@/components/Layout";
 import EventFormDescription from "@/components/Events/EventFormDescription";
 import { getUserByEmail } from "@/lib/users";
+import { EventDataContextWrapper } from "@/components/Events/EventDataContext";
 
 type Props = {
   organization?: any;
@@ -15,12 +16,14 @@ type Props = {
 export default function CreateEventPage(props: Props) {
   return (
     <Layout>
-      <div className="relative flex flex-col gap-5 w-full h-full">
-        <EventFormDescription />
-        <div className="flex flex-wrap w-full h-full justify-between">
-          <CreateEvent />
+      <EventDataContextWrapper>
+        <div className="relative flex flex-col gap-5 w-full h-full">
+          <EventFormDescription />
+          <div className="flex flex-wrap w-full h-full justify-between">
+            <CreateEvent />
+          </div>
         </div>
-      </div>
+      </EventDataContextWrapper>
     </Layout>
   );
 }

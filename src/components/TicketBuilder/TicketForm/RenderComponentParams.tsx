@@ -65,8 +65,8 @@ function RCParams({ rc }: { rc: RenderComponent }) {
 
 
     return (
-        <div id="renderComponentParams">
-            <div>
+        <div id="renderComponentParams" >
+            <form>
 
                 <p>Position: </p>
                 <NumberInput inputId="positionX" label="X: " onChange={onParamsChange} value={form.position.x}></NumberInput>
@@ -74,7 +74,7 @@ function RCParams({ rc }: { rc: RenderComponent }) {
                 <p>Size: </p>
                 <NumberInput inputId="sizeX" label="X: " onChange={onParamsChange} value={form.size.x}></NumberInput>
                 <NumberInput inputId="sizeY" label="Y: " onChange={onParamsChange} value={form.size.y}></NumberInput>
-            </div>
+            </form>
 
         </div>
     )
@@ -91,7 +91,7 @@ function TextParams({ rc }: { rc: Text }) {
 
     useEffect(() => {
         if (selectedComponent) {
-            setForm({ text: rc.text, color: rc.color  });
+            setForm({ text: rc.text, color: rc.color });
         }
     }, [selectedComponent])
 
@@ -104,7 +104,7 @@ function TextParams({ rc }: { rc: Text }) {
         }
 
         if (targetId === 'color') {
-            setForm({ ...form, color: e.target.value  })
+            setForm({ ...form, color: e.target.value })
         }
 
     }
@@ -158,17 +158,19 @@ export default function RenderComponentParams() {
                 <span className="p-2">Parameters</span>
                 <button className="p-2" onClick={onCloseClick}>X</button>
             </div>
-            {
-                (() => {
-                    if (selectedComponent instanceof Text) {
-                        return <TextParams rc={selectedComponent}></TextParams>
-                    }
-                    if (selectedComponent instanceof Image) {
-                        return <ImageParams rc={selectedComponent}></ImageParams>
-                    }
-                    return null;
-                })()
-            }
+            <div className="p-2">
+                {
+                    (() => {
+                        if (selectedComponent instanceof Text) {
+                            return <TextParams rc={selectedComponent}></TextParams>
+                        }
+                        if (selectedComponent instanceof Image) {
+                            return <ImageParams rc={selectedComponent}></ImageParams>
+                        }
+                        return null;
+                    })()
+                }
+            </div>
         </div>
     )
 

@@ -57,6 +57,8 @@ const handler = nc({
         // @ts-ignore
       } = eventFormParser.parse(req.body as FormBody, req.files as IFile[]);
       try {
+        // create TicketView = { linkCloudinary: null, id: "id", event: null }
+
         /**
          * Does not return the created event
          * if you add await it takes pretty long to load all the files to cloudinary

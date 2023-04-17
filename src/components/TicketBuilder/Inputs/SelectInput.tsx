@@ -10,13 +10,13 @@ export type Props = {
 export default function SelectInput( { inputId, label, values, onChange }: Props ) {
 
     return (
-        <div>
+        <div className="flex flex-row justify-between items-center">
             <label htmlFor={inputId}>{label}</label>
-            <select id={inputId} onChange={onChange}>
+            <select className="bg-ueventSecondary m-2 p-1 rounded-[8px] text-center" id={inputId} onChange={onChange}>
                 {
                     values.map((value, index) => {
                         return (
-                            <option key={index} value={value}>{value}</option>
+                            <option className="p-1" key={index} value={value}>{value}</option>
                         )
                     })
                 }

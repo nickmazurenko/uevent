@@ -13,6 +13,9 @@ module.exports = {
       ueventSecondary: "#1A1A1A",
       ueventContrast: "#078c9e",
       ueventText: "#F8F9FB",
+
+      ticketBuilderHover: "#272727",
+      ticketBuilderBorder: "#616161"
     },
     extend: {
       blur: {

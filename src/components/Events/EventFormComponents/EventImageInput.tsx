@@ -12,7 +12,7 @@ export default function EventImageInput({ id, value, onChange }: Props) {
     <div className="flex flex-col items-center w-full mb-6">
       <label
         htmlFor="imageInput"
-        className="block mb-2 text-sm font-medium text-gray-900"
+        className="block mb-2 text-sm font-medium text-ueventText"
       >
         Event Images
       </label>

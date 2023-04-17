@@ -33,17 +33,31 @@ function ImageDropZone({ onChange, id, value, index, number }: DropZoneProps) {
     <Dropzone maxFiles={number} onDrop={handleDrop}>
       {({ getRootProps, getInputProps }) => (
         <div
-          className="flex flex-col gap-2 text-gray-400 text-sm items-center justify-center w-28 h-28 bg-gray-700 rounded-md"
+          className="flex flex-col gap-2 text-gray-500 text-sm items-center justify-center w-28 h-28 bg-ueventSecondary rounded-md"
           {...getRootProps()}
         >
-          <input {...getInputProps()} />
+          <input
+            onChange={(e) => {
+              e.preventDefault();
+              // const change = getInputProps().onChange;
+              // if (change) change(e);
+            }}
+            {...getInputProps()}
+          />
+          {/* <input type="file" id="id" value={value} onChange={onChange}  /> */}
           {index === 0 ? (
             <>
               <p className="text-center p-2 z-10">Drop files here or click</p>
-              <AiOutlinePlus className="z-0 absolute text-gray-600" size={50} />
+              <AiOutlinePlus
+                className="z-0 absolute text-ueventContrast"
+                size={50}
+              />
             </>
           ) : (
-            <AiOutlineCamera className="z-0 absolute text-gray-600" size={50} />
+            <AiOutlineCamera
+              className="z-0 absolute text-ueventContrast"
+              size={50}
+            />
           )}
         </div>
       )}
@@ -74,9 +88,13 @@ function ImageInput({
           className="absolute right-0 top-0"
         />
         <Image
-          width={100}
-          className={idx === 0 ? "border-4 border-blue-700" : ""}
-          height={100}
+          width={200}
+          className={
+            idx === 0
+              ? "border-4 border-ueventContrast rounded-xl"
+              : "rounded-xl"
+          }
+          height={200}
           src={URL.createObjectURL(image)}
           alt={image.name}
         />

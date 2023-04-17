@@ -10,9 +10,9 @@ export type Props = {
 export default function CheckboxInput( { inputId, label, value, onChange }: Props ) {
 
     return (
-        <div>
+        <div className="flex flex-row justify-between items-center">
             <label htmlFor={inputId}>{label}</label>
-            <input type="checkbox" id={inputId} defaultChecked={value} onChange={onChange}></input>
+            <input className="bg-ueventSecondary m-2 p-1 rounded-[8px] text-center" type="checkbox" id={inputId} defaultChecked={value} onChange={onChange}></input>
         </div>
     )
 

@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import Button from "../defaults/Buttons/Button";
 import EventFrontService, {
   Currency,
@@ -6,7 +6,10 @@ import EventFrontService, {
 } from "@/lib/events/EventsFrontService";
 import EventForm from "./EventForm";
 import Event from "./Event";
-import { Tabs } from "flowbite-react";
+import { Tabs, TabsRef } from "flowbite-react";
+import TicketBuilder from "../TicketBuilder/TicketBuilder";
+import TicketBuilderContextWrapper from "../TicketBuilder/TicketBuilderContext";
+import EventDataContext, { EventDataContextWrapper } from "./EventDataContext";
 const eventImageId = "eventImages";
 
 export default function CreateEvent() {
@@ -26,6 +29,11 @@ export default function CreateEvent() {
 
   const [loading, setLoading] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
+
+  const tabsRef = useRef<TabsRef>(null);
+  const openTicketBuilderTab = () => {
+    tabsRef.current?.setActiveTab(2);
+  }
 
   const service = new EventFrontService({
     eventData,
@@ -52,12 +60,22 @@ export default function CreateEvent() {
     }
   }, [eventImages]);
 
-  const handleFormSubmit = service.createHandleFormSubmit("create");
+
+  const [ticketViewId, setTicketViewId] = useState<string | null>(null);
+
+  const handleFormSubmit = service.createHandleFormSubmit("create", (ticketViewId) => {
+    console.log("TicketViewID: " + ticketViewId);
+    setTicketViewId(ticketViewId);
+  });
+
+  const eventDataContext = useContext(EventDataContext);
+
 
   return (
-    <div className="flex pt-36 flex-col items-center min-w-[35%] gap-6">
-      <h1 className="text-white mb-6">Create a new Event</h1>
-      <Tabs.Group>
+    <div className="flex flex-col items-center w-full gap-6">
+      <Tabs.Group
+        className="w-full flex self-center items-center justify-center z-50"
+        ref={tabsRef}>
         <Tabs.Item title="Create Event">
           <EventForm
             onSubmit={handleFormSubmit}
@@ -67,6 +85,7 @@ export default function CreateEvent() {
             imageId={eventImageId}
             eventData={eventData}
             formType="create"
+            openTicketBuilderTab={openTicketBuilderTab}
           />
         </Tabs.Item>
         <Tabs.Item title="Preview">
@@ -76,11 +95,12 @@ export default function CreateEvent() {
             event={generatePreviewEvent()}
           />
         </Tabs.Item>
+        <Tabs.Item title="Ticket builder" className="w-full">
+          <TicketBuilderContextWrapper>
+            <TicketBuilder {...{ handleFormSubmit, ticketViewId }}></TicketBuilder>
+          </TicketBuilderContextWrapper>
+        </Tabs.Item>
       </Tabs.Group>
-      <Button
-        text="open preview"
-        onClick={() => setOpenPreview(!openPreview)}
-      />
     </div>
   );
 }

@@ -12,11 +12,11 @@ import { Navigation } from "swiper";
 
 export default function SlideShow({ images }: { images: string[] }) {
   return (
-    <div className="flex flex-col items-center justify-center w-[90vw]">
-      <Swiper navigation={true} modules={[Navigation]} className="w-1/2">
+    <div className="flex flex-col items-center justify-center w-full">
+      <Swiper navigation={true} modules={[Navigation]} className="w-full">
         {images.map((image, key) => (
           <SwiperSlide key={key}>
-            <Image alt="eventImage" src={image} width={500} height={500} />
+            <Image className="w-full rounded-2xl" alt="eventImage" src={image} width={500} height={500} />
           </SwiperSlide>
         ))}
       </Swiper>

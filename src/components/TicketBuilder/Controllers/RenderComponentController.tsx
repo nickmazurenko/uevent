@@ -13,7 +13,7 @@ export type Props = {
     moveDown: () => void
 }
 
-export default function RenderComponentController({controllerData, rc, moveUp, moveDown}: Props) {
+export default function RenderComponentController({ controllerData, rc, moveUp, moveDown }: Props) {
 
     const { rcService, setSelectedComponent } = useContext(TicketBuilderContext);
 
@@ -27,11 +27,14 @@ export default function RenderComponentController({controllerData, rc, moveUp, m
     }
 
     return (
-        <div className="p-2 " >
-            <span className="hover:bg-cyan-400 cursor-pointer p-2 w-[50%]" onClick={onSelectComponent}>{ controllerData.name }</span>
-            <button className="hover:bg-cyan-400 cursor-pointer p-2" onClick={() => moveUp()}>↑</button>
-            <button className="hover:bg-cyan-400 cursor-pointer p-2" onClick={() => moveDown()}>↓</button>
-            <button className="p-2 hover:bg-red-600" onClick={onDeleteComponentClick}>X</button>
+        <div className="m-2 border-solid border-ticketBuilderBorder border-y-2 flex justify-between hover:bg-ticketBuilderHover" >
+            <span className="hover:bg-cyan-400 cursor-pointer p-1 w-[50%]" onClick={onSelectComponent}>{controllerData.name}</span>
+            <div>
+                <button className="hover:bg-cyan-400 cursor-pointer p-1" onClick={() => moveUp()}>↑</button>
+                <button className="hover:bg-cyan-400 cursor-pointer p-1" onClick={() => moveDown()}>↓</button>
+                <button className="p-1 hover:bg-red-600" onClick={onDeleteComponentClick}>X</button>
+            </div>
+
         </div>
     )
 

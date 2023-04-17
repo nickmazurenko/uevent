@@ -58,7 +58,7 @@ const TagInput = (props: Props) => {
     <ReactTags
       tags={tags}
       // TODO: create a fetch request to get event tag examples
-      // suggestions={suggestions}
+      suggestions={suggestions}
       delimiters={delimiters}
       handleDelete={handleDelete}
       handleAddition={handleAddition}
@@ -71,3 +71,36 @@ const TagInput = (props: Props) => {
 };
 
 export default TagInput;
+
+const suggestions = [
+  {"id": "concert", "text": "Concert"},
+  {"id": "festival", "text": "Festival"},
+  {"id": "conference", "text": "Conference"},
+  {"id": "workshop", "text": "Workshop"},
+  {"id": "seminar", "text": "Seminar"},
+  {"id": "exhibition", "text": "Exhibition"},
+  {"id": "networking", "text": "Networking"},
+  {"id": "party", "text": "Party"},
+  {"id": "gala", "text": "Gala"},
+  {"id": "awards", "text": "Awards"},
+  {"id": "launch", "text": "Launch"},
+  {"id": "opening", "text": "Opening"},
+  {"id": "closing", "text": "Closing"},
+  {"id": "fundraiser", "text": "Fundraiser"},
+  {"id": "panel", "text": "Panel"},
+  {"id": "roundtable", "text": "Roundtable"},
+  {"id": "retreat", "text": "Retreat"},
+  {"id": "bootcamp", "text": "Bootcamp"},
+  {"id": "hackathon", "text": "Hackathon"},
+  {"id": "meetup", "text": "Meetup"},
+  {"id": "training", "text": "Training"},
+  {"id": "webinar", "text": "Webinar"},
+  {"id": "symposium", "text": "Symposium"},
+  {"id": "congress", "text": "Congress"},
+  {"id": "forum", "text": "Forum"},
+  {"id": "lecture", "text": "Lecture"},
+  {"id": "competition", "text": "Competition"},
+  {"id": "showcase", "text": "Showcase"},
+  {"id": "recital", "text": "Recital"},
+  {"id": "performance", "text": "Performance"}
+];

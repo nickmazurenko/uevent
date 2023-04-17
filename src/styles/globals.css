@@ -52,16 +52,18 @@ html {
 .ReactTags__tagInput {
   border-radius: 2px;
   display: block;
+  padding: 2px;
+  border-bottom: #078c9e solid 2px !important;
   width: 100% !important;
 }
 .ReactTags__tagInput input.ReactTags__tagInputField,
 .ReactTags__tagInput input.ReactTags__tagInputField:focus {
   height: 35px;
+  background-color: transparent;
   margin: 0;
+  border: none;
   font-size: 12px;
-  background: rgb(55 65 81);
   color: white;
-  border-radius: 5px;
   width: 100%;
   min-width: 150px;
 }
@@ -76,18 +78,17 @@ html {
 
 /* Styles for selected tags */
 .ReactTags__selected span.ReactTags__tag {
-  border: 1px solid #ddd;
-  background: #1d4ed8;
+  background: #078c9e;
   color: white;
   font-size: 12px;
   display: inline-block;
-  padding: 5px;
+  padding: 10px;
   margin: 2px 2px;
-  border-radius: 2px;
+  border-radius: 12px;
 }
 .ReactTags__selected a.ReactTags__remove {
-  color: #aaa;
-  margin-left: 5px;
+  color: red;
+  padding-left: 5px;
   cursor: pointer;
 }
 
@@ -98,21 +99,26 @@ html {
 .ReactTags__suggestions ul {
   list-style-type: none;
   box-shadow: 0.05em 0.01em 0.5em rgba(0, 0, 0, 0.2);
-  background: white;
+  background: #1a1a1a;
+  border-radius: 10px;
+  padding: 5px;
   width: 200px;
 }
 .ReactTags__suggestions li {
-  border-bottom: 1px solid #ddd;
   padding: 5px 10px;
   margin: 0;
 }
 .ReactTags__suggestions li mark {
-  text-decoration: underline;
-  background: none;
+  color: #078c9e;
+  background: #1a1a1a;
   font-weight: 600;
 }
+
+.react-datetime-picker__wrapper {
+  border: none !important;
+}
 .ReactTags__suggestions ul li.ReactTags__activeSuggestion {
-  background: #b7cfe0;
+  color: #078c9e;
   cursor: pointer;
 }
 
@@ -120,7 +126,8 @@ html {
   border: none;
   cursor: pointer;
   background: none;
-  color: white;
+  padding-left: 5px;
+  color: #078c9e;
 }
 
 [data-testid="flowbite-tooltip"] {

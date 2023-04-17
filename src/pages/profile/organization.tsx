@@ -7,6 +7,7 @@ import { GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth/next";
 import { options } from "@/pages/api/auth/[...nextauth]";
 import Menu from "@/components/profile/Menu";
+import { getUserByEmail } from "@/lib/users";
 
 type Props = {
   organization?: Org | undefined;
@@ -38,9 +39,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
+  const user = await getUserByEmail(session.user.email as string);
+
   const organization = await OrganizationService.getUserOrganization(
     // @ts-ignore
-    session.user
+    user
   );
   return { props: { organization } };
 }

@@ -29,7 +29,7 @@ export default function Menu() {
       </Link>
       <Link
         className={getClassName(MenuOptions.tickets)}
-        href="/profile/Tickets"
+        href="/profile/tickets"
       >
         Tickets
       </Link>

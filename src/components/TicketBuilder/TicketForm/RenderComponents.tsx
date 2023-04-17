@@ -4,10 +4,12 @@ import { RenderComponent, Text, Image } from "../CanvasRenderer";
 import TicketData from "../TicketData";
 import RenderComponentController from "../Controllers/RenderComponentController";
 import FileInput from "@/components/defaults/Inputs/FileInput";
+import { Modal } from "flowbite-react";
+import { AiOutlineClose } from "react-icons/ai";
 
 type ImageStatus = "none" | "browse" | "load";
 
-function ModalSelectRC({ toggleModal }: { toggleModal: () => void }) {
+function SelectRC({ toggleModal }: { toggleModal: () => void }) {
 
     const { rcService } = useContext(TicketBuilderContext);
 
@@ -70,21 +72,7 @@ function ModalSelectRC({ toggleModal }: { toggleModal: () => void }) {
     }
 
     return (
-        <div id="defaultModal" aria-hidden="true" className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
-            <div className="relative w-[30%] h-full max-w-2xl md:h-auto">
-                {/* <!-- Modal content --> */}
-                <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    {/* <!-- Modal header --> */}
-                    <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                            Select component
-                        </h3>
-                        <button onClick={toggleModal} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
-                            <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                            <span className="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    {/* <!-- Modal body --> */}
+                    // {/* <!-- Modal body --> */}
                     <div className="p-6 space-y-6">
                         {
                             addImageStatus === "none" &&
@@ -112,14 +100,14 @@ function ModalSelectRC({ toggleModal }: { toggleModal: () => void }) {
                             </>
                         }
                     </div>
-                </div>
-            </div>
-        </div>
+        //         </div>
+        //     </div>
+        // </div>
     )
 }
 
 export default function RenderComponents({ ticketData, setTicketData }: { ticketData: TicketData, setTicketData: Dispatch<SetStateAction<TicketData>> }) {
-    const { ticketItems, renderComponentsArray, rcService} = useContext(TicketBuilderContext);
+    const { ticketItems, renderComponentsArray, rcService } = useContext(TicketBuilderContext);
 
     const [isAddComponent, setIsAddComponent] = useState(false);
 
@@ -163,13 +151,13 @@ export default function RenderComponents({ ticketData, setTicketData }: { ticket
     }
 
     return (
-        <div className="w-[25%]" id="renderComponents">
-            Render Components
+        <div className="w-[20%] min-w-min" id="renderComponents">
+            <span className="m-2">Render Components</span>
             {
                 renderComponentsArray.map((rc, index) => {
-                    return <RenderComponentController 
-                        key={index} 
-                        rc={rc} 
+                    return <RenderComponentController
+                        key={index}
+                        rc={rc}
                         controllerData={{ name: getInstanceOf(rc) }}
                         moveUp={createMoveFunction("up", index)}
                         moveDown={createMoveFunction("down", index)}
@@ -177,11 +165,23 @@ export default function RenderComponents({ ticketData, setTicketData }: { ticket
                 })
             }
             <button
-                className="p-2 hover:bg-cyan-400 w-[100%]"
+                className="p-2 hover:bg-cyan-400 w-[100%] text-[#11B7CE]"
                 onClick={onAddComponentClick}>
                 Add component</button>
             {
-                isAddComponent && <ModalSelectRC toggleModal={toggleModal} />
+                isAddComponent &&
+                <Modal
+                    onClose={() => toggleModal()}
+                    show={isAddComponent}
+                    size="md"
+                    className="bg-ueventSecondary backdrop-blur-sm"
+                    dismissible={true}
+                >
+                    <Modal.Body className="drop-shadow-2xl w-full flex flex-col justify-center items-center bg-ueventSecondary rounded-lg">
+                        <SelectRC {...{ toggleModal }} />
+                    </Modal.Body>
+                </Modal>
+
             }
         </div>
     )

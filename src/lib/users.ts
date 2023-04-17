@@ -1,3 +1,5 @@
+import prisma from "@/lib/prisma";
+
 export const getUserByEmail = async (
   email: string,
   includeFavorites: boolean = false
@@ -36,6 +38,7 @@ export const getUserByEmail = async (
       },
     },
   });
+
   return {
     ...user,
     createdAt: user?.createdAt.toISOString(),

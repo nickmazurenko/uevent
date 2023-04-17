@@ -61,14 +61,14 @@ export default function EventLocationInput({
   }, []);
 
   return (
-    <div className=" flex flex-row w-full items-center gap-4 relative ">
+    <div className=" flex flex-col md:flex-row w-full items-center gap-4 relative ">
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center gap-2 mb-2 text-lg">
           <BiLocationPlus size={30} />
           <span className="sb-title">Address Selection</span>
         </div>
         <input
-          className="border-b-2 border-b-gray-700 border-transparent"
+          className="border-b-2 border-b-ueventContrast border-0 bg-transparent"
           type="text"
           placeholder="Address"
           name="address"
@@ -77,7 +77,7 @@ export default function EventLocationInput({
           onChange={onInputChange}
         />
         <input
-          className="border-b-2 border-b-gray-700 border-transparent"
+          className="border-b-2 border-b-ueventContrast border-0 bg-transparent"
           type="text"
           name="additional"
           value={location.place["additional"]}
@@ -85,7 +85,7 @@ export default function EventLocationInput({
           onChange={onInputChange}
         />
         <input
-          className="border-b-2 border-b-gray-700 border-transparent"
+          className="border-b-2 border-b-ueventContrast border-0 bg-transparent"
           type="text"
           placeholder="City"
           name="city"
@@ -96,7 +96,7 @@ export default function EventLocationInput({
         <div className="flex flex-row gap-2">
           <input
             type="text"
-            className="w-1/2 border-b-2 border-b-gray-700 border-transparent"
+            className="w-1/2 border-b-2 border-b-ueventContrast border-0 bg-transparent"
             placeholder="State/Province"
             name="state"
             value={location.place["state"]}
@@ -105,7 +105,7 @@ export default function EventLocationInput({
           />
           <input
             type="text"
-            className="w-1/2 border-b-2 border-b-gray-700 border-transparent"
+            className="w-1/2 border-b-2 border-b-ueventContrast border-0 bg-transparent"
             placeholder="Zip/Postal code"
             name="postalCode"
             value={location.place["postalCode"]}
@@ -114,7 +114,7 @@ export default function EventLocationInput({
           />
         </div>
         <input
-          className="border-b-2 border-b-gray-700 border-transparent"
+          className="w-full border-b-2 border-b-ueventContrast border-0 bg-transparent"
           type="text"
           placeholder="Country"
           name="country"
@@ -124,7 +124,7 @@ export default function EventLocationInput({
         />
       </div>
       <div
-        className="map"
+        className="map rounded-lg"
         style={{ height: "300px", width: "100%" }}
         id="gmp-map"
       ></div>
@@ -160,6 +160,20 @@ const myCustomLoadFunction = async (handlePlaceChange: Function) => {
         types: ["address"],
       }
     );
+
+    const geocoder = new window.google.maps.Geocoder();
+    map.addListener("click", (event) => {
+      geocoder.geocode({ location: event.latLng }, (results, status) => {
+        if (status === "OK") {
+          const place = results[0];
+          renderAddress(place);
+          fillInAddress(place);
+          handlePlaceChange(place);
+        } else {
+          window.alert("Geocoder failed due to: " + status);
+        }
+      });
+    });
 
     autocomplete.addListener("place_changed", function () {
       marker.setVisible(false);

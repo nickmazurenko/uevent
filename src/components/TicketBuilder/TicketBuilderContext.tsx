@@ -2,6 +2,7 @@ import { createContext, Dispatch, SetStateAction, useEffect, useState } from "re
 import { RenderComponent } from "./CanvasRenderer";
 import Vector2 from "./CanvasRenderer/Vector2";
 import ComponentsService from "./ComponentsService";
+import { EventData } from "@/lib/events/EventsFrontService";
 
 export type TicketBuilderContextType = {
     ticketItems: {
@@ -38,7 +39,7 @@ const defaultContextValues: TicketBuilderContextType = {
     rcService: null, 
     renderComponentsArray: [],
     selectedComponent: null,
-    setSelectedComponent: null
+    setSelectedComponent: null,
 }
 
 export class RenderComponents {
@@ -91,6 +92,7 @@ export default function TicketBuilderContextWrapper({ children }) {
 
     const [selectedComponent, setSelectedComponent] = useState<RenderComponent | null>(null);
 
+
     useEffect(() => {
 
         renderComponents.updateRenderComponents(renderComponentsArray);
@@ -99,7 +101,7 @@ export default function TicketBuilderContextWrapper({ children }) {
 
 
     return (
-        <div>
+        <div className="w-[97vw]">
             <TicketBuilderContext.Provider value={{
                 ticketItems,
                 setTicketItems,

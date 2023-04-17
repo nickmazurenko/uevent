@@ -57,31 +57,45 @@ const handler = nc({
         // @ts-ignore
       } = eventFormParser.parse(req.body as FormBody, req.files as IFile[]);
       try {
+        // create TicketView = { linkCloudinary: null, id: "id", event: null }
+        const ticketView = await prisma.ticketView.create({ data: {} });
+
         /**
          * Does not return the created event
          * if you add await it takes pretty long to load all the files to cloudinary
          * TODO: figure out if it is needed to return the event here or it can be loaded later
          */
         Promise.all(
-          images.map(
-            async (image) => await uploadEventImage(image as DataURIParser)
-          )
-        ).then((cloudinaryImages) => {
-          EventService.create(
-            organization as Organization,
-            name as string,
-            description as string,
-            new Date(startAt as string) as Date,
-            duration as number,
-            cloudinaryImages,
-            tickets as number,
-            cost as { amount: number; currency: string },
-            location as JSON,
-            tags as string[]
-          );
+            images.map(
+                async (image) => await uploadEventImage(image as DataURIParser)
+            )
+        ).then(async (cloudinaryImages) => {
+            const event = await EventService.create(
+                organization as Organization,
+                name as string,
+                description as string,
+                new Date(startAt as string) as Date,
+                duration as number,
+                cloudinaryImages,
+                tickets as number,
+                cost as { amount: number; currency: string },
+                location as JSON,
+                tags as string[]
+            );
+
+            await prisma.ticketView.update({
+                where: {
+                    id: ticketView.id,
+                },
+                data: {
+                    eventId: event.id,
+                },
+            });
         });
 
-        res.status(201).json({ data: { event: null } });
+        res.status(201).json({
+            data: { event: null, ticketViewId: ticketView.id },
+        });
       } catch (error) {
         console.error(error);
         res.status(500).json({ data: null });

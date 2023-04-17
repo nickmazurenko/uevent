@@ -5,6 +5,9 @@ import OrganizationService from "@/lib/organizations/OrganizationService";
 import CreateEvent from "@/components/Events/CreateEvent";
 import { User } from "@prisma/client";
 import Layout from "@/components/Layout";
+import EventFormDescription from "@/components/Events/EventFormDescription";
+import { getUserByEmail } from "@/lib/users";
+import { EventDataContextWrapper } from "@/components/Events/EventDataContext";
 
 type Props = {
   organization?: any;
@@ -13,9 +16,14 @@ type Props = {
 export default function CreateEventPage(props: Props) {
   return (
     <Layout>
-      <div className="relative flex flex-col gap-5 w-full h-full">
-        <CreateEvent />
-      </div>
+      <EventDataContextWrapper>
+        <div className="relative flex flex-col gap-5 w-full h-full">
+          <EventFormDescription />
+          <div className="flex flex-wrap w-full h-full justify-between">
+            <CreateEvent />
+          </div>
+        </div>
+      </EventDataContextWrapper>
     </Layout>
   );
 }
@@ -31,17 +39,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       props: {},
     };
   }
-
+  const user = await getUserByEmail(session.user.email as string);
   // @ts-ignore
-  const organization = await OrganizationService.getUserOrganization(
-    session.user
-  );
+  const organization = await OrganizationService.getUserOrganization(user);
 
   if (!organization) {
     return {
       redirect: {
         permanent: false,
-        destination: "/organizations",
+        destination: "/profile/organization",
       },
       props: {},
     };

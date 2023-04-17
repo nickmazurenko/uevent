@@ -127,6 +127,7 @@ export default class EventService {
       where: { id: eventId },
       include: {
         purchasedTickets: includeTickets,
+        organization: true,
         favoritedBy: {
           select: {
             user: {

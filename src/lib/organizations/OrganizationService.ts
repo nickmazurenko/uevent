@@ -1,4 +1,6 @@
 import { Organization, User } from "@prisma/client";
+import { getUserByEmail } from "../users";
+import prisma from "@/lib/prisma";
 
 export interface ICloudinaryImage {
   url: string;
@@ -68,6 +70,9 @@ export default class OrganizationService {
 
   static async getUserOrganization(user: User | null) {
     if (!user) return null;
+    if (!user.id) {
+      user.id = (await getUserByEmail(user.email as string)).id;
+    }
 
     const organization = await prisma.organization.findFirst({
       where: {
@@ -154,12 +159,26 @@ export default class OrganizationService {
   }
 
   static async retrieveOne(id: string) {
-    const organization = await prisma.organization.findUnique({
+    const organization = await prisma.organization.findFirst({
       where: {
         id,
       },
       include: {
         news: true,
+        events: {
+          include: {
+            purchasedTickets: true,
+            favoritedBy: {
+              select: {
+                user: {
+                  select: {
+                    email: true,
+                  },
+                },
+              },
+            },
+          },
+        },
         owner: {
           select: {
             image: true,
@@ -169,12 +188,21 @@ export default class OrganizationService {
         },
       },
     });
-    return {
-      ...organization,
-      news: organization?.news.map((news) => ({
+    if (organization?.events)
+      // @ts-ignore
+      organization.events = organization?.events.map((event) => ({
+        ...event,
+        start_at: event.start_at.toISOString(),
+        created_at: event.created_at.toISOString(),
+      }));
+
+    if (organization?.news)
+      // @ts-ignore
+      organization.news = organization?.news?.map((news) => ({
         ...news,
         createdAt: news.createdAt.toISOString(),
-      })),
-    };
+      }));
+
+    return organization;
   }
 }

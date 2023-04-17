@@ -8,6 +8,7 @@ import Image from "next/image";
 
 type Props = {
   news: News;
+  isOwner?: boolean;
 };
 
 function NewsFormModal({
@@ -50,14 +51,17 @@ export default function NewsList(props: Props) {
 
   return (
     <div className="flex flex-col w-full h-full gap-5 items-center justify-center">
-      <button
-        onClick={() => {
-          setShow(!show);
-        }}
-        className="p-2 w-full hover:bg-ueventContrast bg-transparent border-2 border-ueventContrast hover:text-ueventText text-ueventContrast rounded-xl"
-      >
-        Add News
-      </button>
+      {props.isOwner && (
+        <button
+          onClick={() => {
+            setShow(!show);
+          }}
+          className="p-2 w-full hover:bg-ueventContrast bg-transparent border-2 border-ueventContrast hover:text-ueventText text-ueventContrast rounded-xl"
+        >
+          Add News
+        </button>
+      )}
+
       <NewsFormModal show={show} onClose={onClose} />
       <div className="w-full h-full flex flex-col gap-5 justify-center items-center text-ueventText">
         {props.news ? (

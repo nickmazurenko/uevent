@@ -15,7 +15,7 @@ export default function Description(props: { className?: string }) {
       <div className="sm:absolute lg:inset-0 bottom-0 flex items-center justify-start">
         <div className="p-8 max-w-3xl mx-auto gap-5 flex flex-col lg:w-2/3">
           <svg
-            className="text-ueventContrast absolute top-0 right-0 w-1/4"
+            className="text-ueventContrast absolute bottom-0 right-0 w-1/4"
             viewBox="0 0 351 667"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

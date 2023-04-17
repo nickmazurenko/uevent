@@ -60,15 +60,16 @@ export default function CreateEvent() {
     }
   }, [eventImages]);
 
-  const handleFormSubmit = service.createHandleFormSubmit("create");
+
+  const [ticketViewId, setTicketViewId] = useState<string | null>(null);
+
+  const handleFormSubmit = service.createHandleFormSubmit("create", (ticketViewId) => {
+    console.log("TicketViewID: " + ticketViewId);
+    setTicketViewId(ticketViewId);
+  });
 
   const eventDataContext = useContext(EventDataContext);
 
-  useEffect(() => {
-    if (eventDataContext.setEventData)
-      eventDataContext.setEventData(eventData);
-
-  }, [eventData]);
 
   return (
     <div className="flex flex-col items-center w-full gap-6">
@@ -96,7 +97,7 @@ export default function CreateEvent() {
         </Tabs.Item>
         <Tabs.Item title="Ticket builder" className="w-full">
           <TicketBuilderContextWrapper>
-            <TicketBuilder {...{handleFormSubmit}}></TicketBuilder>
+            <TicketBuilder {...{ handleFormSubmit, ticketViewId }}></TicketBuilder>
           </TicketBuilderContextWrapper>
         </Tabs.Item>
       </Tabs.Group>

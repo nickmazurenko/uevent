@@ -82,13 +82,13 @@ model Organization {
 }
 
 model News {
-  id              String       @id @default(auto()) @map("_id") @db.ObjectId
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
   title           String
   plot            String
   image           String
   image_id        String
   image_signature String
-  createdAt       DateTime     @default(now())
+  createdAt       DateTime      @default(now())
   organizationId  String?       @db.ObjectId
   organization    Organization? @relation(fields: [organizationId], references: [id])
 
@@ -167,4 +167,12 @@ model Payment {
   event        Event    @relation("Payments", fields: [eventId], references: [id])
   eventId      String   @db.ObjectId
   ticketsCount Int
+}
+
+model TicketView {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  eventId         String?
+  image           String?
+  image_id        String?
+  image_signature String?
 }

@@ -6,7 +6,7 @@ import TicketForm from "./TicketForm/TicketForm";
 import TicketView from "./TicketForm/TicketView";
 import EventDataContext from "../Events/EventDataContext";
 
-export default function TicketBuilder({ handleFormSubmit }: { handleFormSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void> }) {
+export default function TicketBuilder({ handleFormSubmit, ticketViewId }: { handleFormSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>, ticketViewId: string }) {
 
     const { selectedComponent } = useContext(TicketBuilderContext);
     const { eventData } = useContext(EventDataContext);
@@ -14,7 +14,7 @@ export default function TicketBuilder({ handleFormSubmit }: { handleFormSubmit: 
     return (
         <div className="flex text-[#ADA7A7] w-full justify-between">
             <RenderComponents></RenderComponents>
-            <TicketView></TicketView>
+            <TicketView {...{ticketViewId}}></TicketView>
             {
                 selectedComponent
                     ?

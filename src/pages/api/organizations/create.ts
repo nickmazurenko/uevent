@@ -49,9 +49,9 @@ const handler = nc({
 
 
             try {
-
-
+                
                 const cloudinaryImage = await uploadOrganizationImage(image as DataURIParser);
+                
                 const newOrganization = await OrganizationService.create(
                     user as User,
                     name as string,

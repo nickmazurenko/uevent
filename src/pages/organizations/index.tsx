@@ -29,7 +29,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const session = await getServerSession(context.req, context.res, options);
 
     if (!session || !session.user) {
-        return { redirect: '/signin' }
+        return {
+            redirect: {
+              permanent: false,
+              destination: "/",
+            },
+            props: {},
+          };
     }
 
 

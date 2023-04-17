@@ -69,12 +69,26 @@ export default class OrganizationService {
   static async getUserOrganization(user: User | null) {
     if (!user) return null;
 
-    return await prisma.organization.findFirst({
+    const organization = await prisma.organization.findFirst({
       where: {
         ownerId: user?.id,
       },
       include: {
-        events: true,
+        news: true,
+        events: {
+          include: {
+            purchasedTickets: true,
+            favoritedBy: {
+              select: {
+                user: {
+                  select: {
+                    email: true,
+                  },
+                },
+              },
+            },
+          },
+        },
         owner: {
           select: {
             image: true,
@@ -82,16 +96,70 @@ export default class OrganizationService {
             email: true,
           },
         },
+      },
+    });
+    if (organization?.events)
+      // @ts-ignore
+      organization.events = organization?.events.map((event) => ({
+        ...event,
+        start_at: event.start_at.toISOString(),
+        created_at: event.created_at.toISOString(),
+      }));
+
+    if (organization?.news)
+      // @ts-ignore
+      organization.news = organization?.news?.map((news) => ({
+        ...news,
+        createdAt: news.createdAt.toISOString(),
+      }));
+
+    return organization;
+  }
+
+  static async createNews({
+    title,
+    plot,
+    image,
+    organizationId,
+  }: {
+    title: string;
+    plot: string;
+    image: ICloudinaryImage;
+    organizationId: string;
+  }) {
+    return await prisma.news.create({
+      data: {
+        title,
+        plot,
+        image: image.url,
+        image_id: image.public_id,
+        image_signature: image.signature,
+        organizationId: organizationId,
       },
     });
   }
 
+  static async retrieveAllNews() {
+    const news = await prisma.news.findMany({
+      include: {
+        organization: true,
+      },
+      orderBy: { createdAt: "asc" },
+    });
+
+    return news.map((item) => ({
+      ...item,
+      createdAt: item.createdAt.toISOString(),
+    }));
+  }
+
   static async retrieveOne(id: string) {
-    return await prisma.organization.findUnique({
+    const organization = await prisma.organization.findUnique({
       where: {
         id,
       },
       include: {
+        news: true,
         owner: {
           select: {
             image: true,
@@ -101,5 +169,12 @@ export default class OrganizationService {
         },
       },
     });
+    return {
+      ...organization,
+      news: organization?.news.map((news) => ({
+        ...news,
+        createdAt: news.createdAt.toISOString(),
+      })),
+    };
   }
 }

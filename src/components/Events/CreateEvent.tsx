@@ -55,7 +55,7 @@ export default function CreateEvent() {
   const handleFormSubmit = service.createHandleFormSubmit("create");
 
   return (
-    <div className="flex flex-col items-center min-w-[35%] gap-6">
+    <div className="flex pt-36 flex-col items-center min-w-[35%] gap-6">
       <h1 className="text-white mb-6">Create a new Event</h1>
       <Tabs.Group>
         <Tabs.Item title="Create Event">

@@ -1,31 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body, html {
-  background-color: #ededed ;
+body,
+html {
+  background-color: #111010;
+  font-family: "Lucida Console", Monaco, monospace;
 }
 
-.header {
-  background-color: #3f51b5 ;
+.monserat {
+  font-family: "Montserrat", sans-serif;
 }
 
-.text-header {
-  color: #ffffff;
+.roboto {
+  font-family: "Roboto", sans-serif;
 }
 
 .button-color {
-  background-color: #3f51b5 ;
+  background-color: #3f51b5;
 }
 
 .button-text {
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .button-hover:hover {
-  background-color: #ff4081 ;
+  background-color: #ff4081;
 }
 
 .ReactTags__tags {
@@ -116,4 +121,23 @@ body, html {
   cursor: pointer;
   background: none;
   color: white;
+}
+
+[data-testid="flowbite-tooltip"] {
+  background-color: #1a1a1a !important;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #078c9e;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #1a1a1a;
 }
